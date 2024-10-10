@@ -20,6 +20,16 @@ app.use("/r20", R20Routes);
 app.use("/n20", N20Routes);
 
 //Middlewares
+const verifyToken = require("./middlewares/auth.js");
+app.get('/verify', verifyToken, (req, res) => {
+    console.log("Token Verified");
+
+    res.status(200).json({
+        message: "Logged In Successfully",
+        token: req.token,
+        user: req.user
+    })
+});
 
 //Server
 const PORT = process.env.PORT || 5000;

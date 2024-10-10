@@ -3,13 +3,13 @@ import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useRecoilState, useRecoilValue } from "recoil";
-// import { userAtom } from "../state/userAtom.js";
+import { useRecoilState } from "recoil";
+import userAtom from "../state/userAtom.js";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../components/Spinner.jsx";
 
 function LoginPage() {
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useRecoilState(userAtom);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
