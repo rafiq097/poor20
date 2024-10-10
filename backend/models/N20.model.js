@@ -18,6 +18,9 @@ const dataSchema = new mongoose.Schema({
     RANK: {
         type: Number,
     },
+    BRANCH: {
+        type: String
+    },
     CASTE: {
         type: String
     },
@@ -54,9 +57,6 @@ const dataSchema = new mongoose.Schema({
     AADHAAR: {
         type: Number
     },
-    BRANCH: {
-        type: String
-    }
 });
 
 const N20 = mongoose.model("N20", dataSchema, "N20");
