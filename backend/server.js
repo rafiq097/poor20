@@ -12,10 +12,12 @@ const db = require("./db/db.js");
 db(process.env.MONGO_URI);
 
 //Routes
-const R20Router = require("./routes/R20.routes.js");
-const N20Router = require("./routes/N20.routes.js");
-app.use("/r20", R20Router);
-app.use("/n20", N20Router);
+const userRoutes = require("./routes/user.routes.js");
+const R20Routes = require("./routes/R20.routes.js");
+const N20Routes = require("./routes/N20.routes.js");
+app.use("/users", userRoutes);
+app.use("/r20", R20Routes);
+app.use("/n20", N20Routes);
 
 //Middlewares
 

@@ -1,14 +1,9 @@
 const mongoose = require("mongoose");
 
-const toIST = (date) => {
-    const IST = 5.5 * 60 * 60 * 1000;
-    return new Date(date.getTime() + IST);
-};
-
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, "Enter Email"],
+        required: [true, "Enter Name"],
     },
     email: {
         type: String,
@@ -24,6 +19,11 @@ const userSchema = new mongoose.Schema({
 {
     timestamps: true 
 });
+
+const toIST = (date) => {
+    const IST = 5.5 * 60 * 60 * 1000;
+    return new Date(date.getTime() + IST);
+};
 
 userSchema.pre('save', function(next) {
     if (this.isNew) {

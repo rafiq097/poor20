@@ -69,9 +69,7 @@ function LoginPage() {
               <>
                 <GoogleLogin
                   onSuccess={(res) => {
-                    console.log("called");
                     let x = jwtDecode(res?.credential);
-                    console.log(x);
                     handleLogin(x);
                   }}
                   onError={(err) => {

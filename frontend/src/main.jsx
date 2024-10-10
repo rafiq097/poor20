@@ -4,8 +4,19 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Toaster } from "react-hot-toast";
 import { RecoilRoot } from "recoil";
 import { BrowserRouter } from "react-router-dom";
+import axios from "axios";
 import App from "./App.jsx";
 import "./index.css";
+
+axios.interceptors.request.use(
+  function (config) {
+    config.baseURL = "http://localhost:5000";
+    return config;
+  },
+  function (error) {
+    return Promise.reject(error);
+  }
+);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
