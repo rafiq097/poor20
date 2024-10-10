@@ -6,56 +6,59 @@ const dataSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    Name: {
+    NAME: {
         type: String
     },
-    Gender: {
+    GENDER: {
         type: String
     },
     DOB: {
         type: String,
     },
-    Caste: {
+    RANK: {
+        type: Number,
+    },
+    CASTE: {
         type: String
     },
-    Phone: {
+    PHONE: {
         type: Number
     },
-    email: {
+    EMAIL: {
         type: String
     },
-    Father: {
+    FATHER: {
         type: String
     },
-    Father_Phone: {
+    FATHER_PHONE: {
         type: Number
     },
-    Address: {
+    ADDRESS: {
         type: String
     },
-    Door_No: {
+    DOOR_NO: {
         type: String
     },
-    Mandal: {
+    MANDAL: {
         type: String
     },
-    Town: {
+    TOWN: {
         type: String
     },
-    District: {
+    DISTRICT: {
         type: String
     },
-    Pincode: {
+    PINCODE: {
         type: String
     },
-    Aadhaar: {
+    AADHAAR: {
         type: Number
     },
-    Branch: {
+    BRANCH: {
         type: String
     }
 });
 
-const Data = mongoose.model("Data", dataSchema, "N20");
+const N20 = mongoose.model("N20", dataSchema, "N20");
 
-module.exports = Data;
+module.exports = N20;
