@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
+import HomePage from "./pages/HomePage";
 import Spinner from "./components/Spinner";
 import "./App.css";
 
@@ -13,7 +14,7 @@ function App() {
     <>
       <div className="flex flex-col min-h-screen">
         <Routes>
-          {/* <Route path="/" element={}/> */}
+          <Route path="/" element={<HomePage />}/>
           <Route path="/login" element={<LoginPage />} />
         </Routes>
       </div>
