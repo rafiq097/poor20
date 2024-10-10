@@ -10,10 +10,10 @@ function App() {
   if (loading) return <Spinner />;
 
   return (
-    <di>
+    <>
       <div className="flex flex-col min-h-screen">
         <Routes>
-          <Route path="/" element={}/>
+          {/* <Route path="/" element={}/> */}
           <Route path="/login" element={<LoginPage />} />
         </Routes>
       </div>
