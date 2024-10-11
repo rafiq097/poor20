@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import Spinner from "../components/Spinner.jsx";
 import { useNavigate } from "react-router-dom";
 
-const HomePage = () => {
+const ExplorePage = () => {
   const [userData, setUserData] = useRecoilState(userAtom);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -50,9 +50,9 @@ const HomePage = () => {
 
   return (
     <>
-      <div>HomePage</div>
+      <div>Explore Page</div>
     </>
   );
 };
 
-export default HomePage;
+export default ExplorePage;
