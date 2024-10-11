@@ -84,7 +84,7 @@ const getAllData = async (req, res) => {
 
         if (ID) {
             user = User.findOne({ id: ID });
-            user.viewedBy(req.user.email);
+            user.viewedBy.push(req.user.email);
         }
         await user.save();
     }
