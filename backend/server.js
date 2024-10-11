@@ -26,7 +26,7 @@ const verifyToken = require("./middlewares/auth.js");
 const userRoutes = require("./routes/user.routes.js");
 const R20Routes = require("./routes/R20.routes.js");
 const N20Routes = require("./routes/N20.routes.js");
-app.use("/users", verifyToken, userRoutes);
+app.use("/users", userRoutes);
 app.use("/r20", verifyToken, R20Routes);
 app.use("/n20", verifyToken, N20Routes);
 
