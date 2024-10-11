@@ -20,16 +20,17 @@ app.use(express.urlencoded({extended: true}));
 const db = require("./db/db.js");
 db(process.env.MONGO_URI);
 
+const verifyToken = require("./middlewares/auth.js");
+
 //Routes
 const userRoutes = require("./routes/user.routes.js");
 const R20Routes = require("./routes/R20.routes.js");
 const N20Routes = require("./routes/N20.routes.js");
-app.use("/users", userRoutes);
-app.use("/r20", R20Routes);
-app.use("/n20", N20Routes);
+app.use("/users", verifyToken, userRoutes);
+app.use("/r20", verifyToken, R20Routes);
+app.use("/n20", verifyToken, N20Routes);
 
 //Middlewares
-const verifyToken = require("./middlewares/auth.js");
 app.get('/verify', verifyToken, (req, res) => {
     console.log("Token Verified");
 

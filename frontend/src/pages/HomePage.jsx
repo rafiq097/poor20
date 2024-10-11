@@ -51,8 +51,11 @@ const HomePage = () => {
 
   const fetchUsers = async () => {
     try {
+      const token = localStorage.getItem("token");
       // if (batch === "") return;
-      const res = await axios.get(`/${batch}/`);
+      const res = await axios.get(`/${batch}/`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setUsers(res.data.data);
     } catch (err) {
       console.log(err.message);
@@ -62,7 +65,10 @@ const HomePage = () => {
   const fetchSearchUserData = async (value) => {
     try {
       // inputRef.current.blur();
-      const res = await axios.get(`/${batch}/?${searchBy}=${value}`);
+      const token = localStorage.getItem("token");
+      const res = await axios.get(`/${batch}/?${searchBy}=${value}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setData(res.data.data[0]);
       setShowData(true);
       setDropdownVisible(false);
@@ -173,7 +179,9 @@ const HomePage = () => {
       {console.log(showData, data)}
       {showData &&
         (hideBro.includes(data.ID) ? (
-          <p className="text-2xl font-bold mb-4 text-center">Why vro &#x1F614;</p>
+          <p className="text-2xl font-bold mb-4 text-center">
+            Why vro &#x1F614;
+          </p>
         ) : (
           <div className="container mx-auto p-4 flex justify-center">
             <div className="overflow-x-auto max-w-lg">

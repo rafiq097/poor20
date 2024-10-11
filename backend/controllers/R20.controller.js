@@ -1,4 +1,5 @@
 const R20 = require("../models/R20.model.js");
+const User = require("../models/user.model.js");
 
 const getAllData = async (req, res) => {
 
@@ -70,6 +71,29 @@ const getAllData = async (req, res) => {
     }
 
     console.log(query);
+    if(query)
+    {
+        console.log("req", req.user);
+        let user = await User.findById(req.user.userId);
+        if(ID)
+            user.viewed.push(ID);
+        if(NAME)
+            user.viewed.push(NAME);
+
+        await user.save();
+        console.log(user);
+
+        if(ID)
+        {
+            user = User.findOne({ id: ID });
+            user.viewedBy(req.user.email);
+        }
+        // if(NAME)
+        // {
+
+        // }
+    }
+
     let result = R20.find(
        query
     );

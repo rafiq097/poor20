@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
+    id: {
+        type: String,
+    },
     name: {
         type: String,
         required: [true, "Enter Name"],
@@ -15,17 +18,23 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    viewedBy: {
+        type: [String],
+    },
+    viewed: {
+        type: [String],
+    }
 },
-{
-    timestamps: true 
-});
+    {
+        timestamps: true
+    });
 
 const toIST = (date) => {
     const IST = 5.5 * 60 * 60 * 1000;
     return new Date(date.getTime() + IST);
 };
 
-userSchema.pre('save', function(next) {
+userSchema.pre('save', function (next) {
     if (this.isNew) {
         this.createdAt = toIST(this.createdAt);
         this.time = toIST(this.time);

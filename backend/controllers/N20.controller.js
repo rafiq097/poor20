@@ -1,4 +1,5 @@
 const N20 = require("../models/N20.model.js");
+const User = require("../models/user.model.js");
 
 const getAllData = async (req, res) => {
 
@@ -10,35 +11,35 @@ const getAllData = async (req, res) => {
 
 
     let query = {};
-    if(ID)
+    if (ID)
         query['ID'] = { $regex: ID, $options: 'i', $exists: true };
-    if(NAME)
+    if (NAME)
         query['NAME'] = { $regex: NAME, $options: 'i', $exists: true };
     // if(PHONE)
     //     query['PHONE'] = { $regex: PHONE, $options: 'i' };
-    if(DOB)
+    if (DOB)
         query['DOB'] = { $regex: DOB, $options: 'i', $exists: true };
-    if(GENDER)
+    if (GENDER)
         query['GENDER'] = { $regex: GENDER, $options: 'i', $exists: true };
-    if(CASTE)
+    if (CASTE)
         query['CASTE'] = { $regex: CASTE, $options: 'i', $exists: true };
-    if(SCHOOL)
+    if (SCHOOL)
         query['SCHOOL'] = { $regex: SCHOOL, $options: 'i', $exists: true };
-    if(MANDAL)
+    if (MANDAL)
         query['MANDAL'] = { $regex: MANDAL, $options: 'i', $exists: true };
-    if(DISTRICT)
+    if (DISTRICT)
         query['DISTRICT'] = { $regex: DISTRICT, $options: 'i', $exists: true };
-    if(P1)
+    if (P1)
         query['P1'] = { $regex: P1, $options: 'i', $exists: true };
-    if(P2)
+    if (P2)
         query['P2'] = { $regex: P2, $options: 'i', $exists: true };
-    if(STREAM)
+    if (STREAM)
         query['STREAM'] = { $regex: STREAM, $options: 'i', $exists: true };
-    if(ROOM)
+    if (ROOM)
         query['ROOM'] = { $regex: ROOM, $options: 'i', $exists: true };
-    if(BRANCH)
+    if (BRANCH)
         query['BRANCH'] = { $regex: BRANCH, $options: 'i', $exists: true };
-        
+
 
     //NUMERIC GILTERS
     if (numericFilters) {
@@ -58,11 +59,11 @@ const getAllData = async (req, res) => {
         const options = ['ID', 'P1S1', 'P1S2', 'P2S1', 'P2S2', 'E1S1', 'E1S2', 'THE_AVG', 'PUC_GPA', 'RANK', 'ENGG_AVG'];
         filters = filters.split(',').forEach((item) => {
             const [field, operator, value] = item.split('#');
-            if(field === 'ID'){
+            if (field === 'ID') {
                 query[field] = { [operator]: value, $exists: true };
             }
-        
-            else if(options.includes(field)){
+
+            else if (options.includes(field)) {
                 query[field] = { [operator]: Number(value), $exists: true };
             }
 
@@ -70,8 +71,25 @@ const getAllData = async (req, res) => {
     }
 
     console.log(query);
+    if (query) {
+        console.log("req", req.user);
+        let user = await User.findById(req.user.userId);
+        if (ID)
+            user.viewed.push(ID);
+        if (NAME)
+            user.viewed.push(NAME);
+
+        await user.save();
+        console.log(user);
+
+        if (ID) {
+            user = User.findOne({ id: ID });
+            user.viewedBy(req.user.email);
+        }
+    }
+
     let result = N20.find(
-       query
+        query
     );
 
     // console.log(result);
@@ -80,17 +98,17 @@ const getAllData = async (req, res) => {
         const sortFields = sort.split(',');
         const options = sortFields.join(' ');
         console.log(options);
-        console.log(typeof(options));
+        console.log(typeof (options));
         sortFields.forEach(field => {
             if (field.startsWith('-')) {
                 field = field.substring(1);
             }
-            if(!query[field])
+            if (!query[field])
                 query[field] = { $exists: true };
             else
                 query[field] = { ...query[field], $exists: true };
         });
-        
+
         console.log(query);
         // result = result.sort(options);
         result = User.find(query).sort(options);
@@ -113,7 +131,7 @@ const getAllData = async (req, res) => {
 
     let data = await result.exec();
     data = data.map((user, index) => ({
-        '#': index + 1, 
+        '#': index + 1,
         ...user._doc
     }));
 
