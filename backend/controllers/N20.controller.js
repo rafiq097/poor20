@@ -86,6 +86,7 @@ const getAllData = async (req, res) => {
             user = User.findOne({ id: ID });
             user.viewedBy(req.user.email);
         }
+        await user.save();
     }
 
     let result = N20.find(
