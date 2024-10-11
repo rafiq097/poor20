@@ -111,13 +111,13 @@ const getAllData = async (req, res) => {
     // result = result.skip(skip).limit(limit);
 
 
-    let n20 = await result.exec();
-    n20 = n20.map((user, index) => ({
+    let data = await result.exec();
+    data = data.map((user, index) => ({
         '#': index + 1, 
         ...user._doc
     }));
 
-    res.status(200).json({ n20, length: n20.length });
+    res.status(200).json({ data, length: data.length });
 };
 
 const getSingleData = async (req, res) => {
