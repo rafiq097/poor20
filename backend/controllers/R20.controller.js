@@ -75,18 +75,20 @@ const getAllData = async (req, res) => {
         console.log("req", req.user);
         let user = await User.findById(req.user.userId);
         if (ID)
-            user.viewed.push(ID);
+            if(!user.viewed.includes(ID))
+                user.viewed.push(ID);
         if (NAME)
-            user.viewed.push(NAME);
+            if(!user.viewed.includes(NAME))
+                user.viewed.push(NAME);
 
         await user.save();
         console.log(user);
 
-        if (ID) {
-            user = User.findOne({ id: ID });
-            user.viewedBy.push(req.user.email);
-        }
-        await user.save();
+        // if (ID) {
+        //     user = User.findOne({ id: ID });
+        //     user.viewedBy.push(req.user.email);
+        // }
+        // await user.save();
         // if(NAME)
         // {
 
