@@ -2,10 +2,19 @@ require("dotenv").config();
 const cors = require('cors');
 
 const express = require("express");
+const path = require('path');
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(express.static(path.join(__dirname, '..', 'frontend', 'dist')));
+// app.use(cors());
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
 //DB
 const db = require("./db/db.js");
@@ -33,9 +42,12 @@ app.get('/verify', verifyToken, (req, res) => {
 
 //Server
 const PORT = process.env.PORT || 5000;
-app.get("/", (req, res) => {
-    res.send("<h1>SAD</h1>");
-})
+// app.get("/", (req, res) => {
+//     res.send("<h1>SAD</h1>");
+// })
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'dist', 'index.html'));
+});
 
 app.listen(PORT, (req, res) => {
     console.log(`Server running on PORT ${PORT}`);
