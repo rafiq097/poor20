@@ -59,7 +59,7 @@ const HomePage = () => {
 
   const fetchSearchUserData = async (value) => {
     try {
-      inputRef.current.blur();
+      // inputRef.current.blur();
       const res = await axios.get(`/${batch}/?${searchBy}=${value}`);
       setData(res.data.data[0]);
       setShowData(true);
@@ -104,7 +104,6 @@ const HomePage = () => {
   const handleSelectValue = (value) => {
     setInputValue(value);
     setDropdownVisible(false);
-    inputRef.current.blur();
     fetchSearchUserData(value);
   };
 
@@ -148,7 +147,7 @@ const HomePage = () => {
       <div className="relative w-full max-w-md">
         <input
           type="text"
-          ref={inputRef}
+          // ref={inputRef}
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           // onFocus={() => setDropdownVisible(true)}
@@ -170,6 +169,7 @@ const HomePage = () => {
         )}
       </div>
 
+      {console.log(showData, data)}
       {showData && (
         <div className="container mx-auto p-4 flex justify-center">
           <div className="overflow-x-auto max-w-lg">
@@ -183,7 +183,9 @@ const HomePage = () => {
                     key === "__v" ||
                     key === "createdAt" ||
                     key === "updatedAt" ||
-                    key === "IMAGE" ||
+                    key === "Image" ||
+                    key === "CET_NO" ||
+                    key === "SSC_NO" ||
                     !value
                   )
                     return null;
