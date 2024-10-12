@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 const HomePage = () => {
   const [userData, setUserData] = useRecoilState(userAtom);
   const [loading, setLoading] = useState(true);
-  const [batch, setBatch] = useState("R20");
+  const [batch, setBatch] = useState("r20");
   const [searchBy, setSearchBy] = useState("ID");
   const [inputValue, setInputValue] = useState("");
   const [users, setUsers] = useState([]);
@@ -158,7 +158,7 @@ const HomePage = () => {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           // onFocus={() => setDropdownVisible(true)}
-          placeholder={`Enter ${searchBy} in ${batch}`}
+          placeholder={`Enter ${searchBy} in ${batch.toUpperCase()}`}
           className="border border-gray-300 rounded p-3 w-full bg-white shadow-md transition duration-200 ease-in-out focus:ring-2 focus:ring-blue-400 focus:outline-none"
         />
         {dropdownVisible && (
