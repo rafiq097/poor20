@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useRecoilState } from "recoil";
 import userAtom from "../state/userAtom.js";
-import { FaBars, FaTimes, FaChartBar, FaUserCircle, FaPowerOff } from "react-icons/fa";
+import {
+  FaBars,
+  FaTimes,
+  FaChartBar,
+  FaUserCircle,
+  FaPowerOff,
+} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Spinner from "./Spinner.jsx";
 import axios from "axios";
@@ -87,30 +93,48 @@ function Navbar() {
       )}
 
       <div
-        className={`fixed inset-y-0 left-0 z-30 w-64 bg-gray-800 p-4 transform md:transform-none 
-        ${isDrawerOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-300 ease-in-out md:block`}
+        className={`fixed inset-y-0 left-0 z-30 w-64 bg-gray-800 p-6 transform md:transform-none 
+      ${
+        isDrawerOpen ? "translate-x-0" : "-translate-x-full"
+      } transition-transform duration-300 ease-in-out md:block`}
       >
         <div className="text-white flex flex-col h-full">
-          <div className="text-center text-xl font-bold mb-8">20</div>
-          <ul className="flex-1 space-y-4">
-            <li className="flex items-center space-x-4 cursor-pointer" onClick={() => handleNavigation("/")}>
+          <div className="text-center text-xl font-bold mb-5 tracking-wide font-sans">
+            20
+          </div>
+
+          <ul className="flex-1 space-y-3">
+            <li
+              className="flex items-center space-x-3 p-3 cursor-pointer hover:bg-gray-700 rounded-lg transition-colors duration-200"
+              onClick={() => handleNavigation("/")}
+            >
               <FaUserCircle className="h-6 w-6 text-gray-300" />
-              <span>Search</span>
+              <span className="text-sm font-semibold">Search</span>
             </li>
-            <li className="flex items-center space-x-4 cursor-pointer" onClick={() => handleNavigation("/explore")}>
+
+            <li
+              className="flex items-center space-x-3 p-3 cursor-pointer hover:bg-gray-700 rounded-lg transition-colors duration-200"
+              onClick={() => handleNavigation("/explore")}
+            >
               <FaChartBar className="h-6 w-6 text-gray-300" />
-              <span>Xplore</span>
+              <span className="text-sm font-semibold">Xplore</span>
             </li>
-            <li className="flex items-center space-x-4 cursor-pointer" onClick={handleLogout}>
-              <FaPowerOff className="h-6 w-6 text-gray-300" />
-              <span>LogOut</span>
+
+            <li
+              className="flex items-center space-x-3 p-3 cursor-pointer hover:bg-red-600 rounded-lg transition-colors duration-200"
+              onClick={handleLogout}
+            >
+              <FaPowerOff className="h-6 w-6 text-red-400" />
+              <span className="text-sm font-semibold">LogOut</span>
             </li>
           </ul>
         </div>
       </div>
 
-      <div className="flex-1 p-4 md:ml-64">
-        <h1 className="flex items-center justify-center text-2xl font-bold">20</h1>
+      <div className="flex-1 p-6 md:ml-64">
+        <h1 className="flex items-center justify-center text-xl font-bold font-sans text-gray-800">
+          20
+        </h1>
       </div>
     </div>
   );
