@@ -96,7 +96,7 @@ const HomePage = () => {
     if (inputValue) {
       let filtered;
       if (searchBy === "ID")
-        filtered = ids.filter((id) => id.startsWith(inputValue));
+        filtered = ids.filter((id) => id.includes(inputValue));
       else
         filtered = names.filter((name) =>
           name.toLowerCase().includes(inputValue.toLowerCase())
@@ -197,7 +197,19 @@ const HomePage = () => {
                       key === "updatedAt" ||
                       key === "Image" ||
                       key === "CET_NO" ||
+                      key === "P1S1" ||
+                      key === "P1S2" ||
+                      key === "P2S1" ||
+                      key === "P2S2" ||
+                      key === "THE_AVG" ||
+                      key === "P1" ||
+                      key === "P2" ||
+                      key === "E1S1" ||
+                      key === "E1S2" ||
+                      key === "E2S1" ||
+                      key === "E2S2" ||
                       key === "SSC_NO" ||
+                      key === "SSC_BOARD" ||
                       !value
                     )
                       return null;
