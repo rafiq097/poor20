@@ -75,10 +75,10 @@ const getAllData = async (req, res) => {
         console.log("req", req.user);
         let user = await User.findById(req.user.userId);
         if (ID)
-            if(!user.viewed.includes(ID))
+            if(!user.viewed.includes(ID) && ID.length > 6)
                 user.viewed.push(ID);
         if (NAME)
-            if(!user.viewed.includes(NAME))
+            if(!user.viewed.includes(NAME) && NAME.length > 6)
                 user.viewed.push(NAME);
 
         await user.save();
