@@ -5,6 +5,7 @@ import userAtom from "../state/userAtom";
 import toast from "react-hot-toast";
 import Spinner from "../components/Spinner.jsx";
 import { useNavigate } from "react-router-dom";
+import { CiCircleRemove } from "react-icons/ci";
 
 const HomePage = () => {
   const [userData, setUserData] = useRecoilState(userAtom);
@@ -135,7 +136,7 @@ const HomePage = () => {
           >
             {/* <option value="">Select</option> */}
             <option value="r20">R20</option>
-            <option value="n20">N20</option>
+            {/* <option value="n20">N20</option> */}
           </select>
         </div>
         <div className="flex items-center">
@@ -152,15 +153,23 @@ const HomePage = () => {
       </div>
 
       <div className="relative w-full max-w-md">
-        <input
-          type="text"
-          // ref={inputRef}
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          // onFocus={() => setDropdownVisible(true)}
-          placeholder={`Enter ${searchBy} in ${batch.toUpperCase()}`}
-          className="border border-gray-300 rounded p-3 w-full bg-white shadow-md transition duration-200 ease-in-out focus:ring-2 focus:ring-blue-400 focus:outline-none"
-        />
+        <div className="relative w-full">
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder={`Enter ${searchBy} in ${batch.toUpperCase()}`}
+            className="border border-gray-300 rounded p-3 w-full bg-white shadow-md transition duration-200 ease-in-out focus:ring-2 focus:ring-blue-400 focus:outline-none"
+          />
+
+          {inputValue && (
+            <CiCircleRemove
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
+              size={24}
+              onClick={() => setInputValue("")}
+            />
+          )}
+        </div>
         {dropdownVisible && (
           <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg">
             {filtered.map((value) => (
@@ -187,9 +196,12 @@ const HomePage = () => {
             <div className="overflow-x-auto max-w-lg">
               <h2 className="text-2xl font-bold mb-4 text-center">{data.ID}</h2>
 
-              <div className="w-full h-60 bg-gray-500 mb-4 flex items-center justify-center">
-                <p className="text-white font-bold">Coming Soon</p>
-                {/* <img src={data.imageUrl} alt={data.NAME}/> */}
+              <div className="w-full h-60 bg-gray-100 mb-4 flex items-center justify-center overflow-hidden rounded-lg">
+                <img
+                  src={`https://raw.githubusercontent.com/pythonista69/r20/main/images/${data.ID}.jpg`}
+                  alt={data.ID}
+                  className="w-full h-full object-contain max-h-60"
+                />
               </div>
 
               <table className="min-w-full bg-white border rounded-lg">
@@ -216,6 +228,7 @@ const HomePage = () => {
                       key === "E2S2" ||
                       key === "SSC_NO" ||
                       key === "SSC_BOARD" ||
+                      key === "PHONE2" ||
                       !value
                     )
                       return null;

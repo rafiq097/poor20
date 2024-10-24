@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import Spinner from "../components/Spinner.jsx";
 import { useNavigate } from "react-router-dom";
 import { ImFilter } from "react-icons/im";
+import { CiCircleRemove } from "react-icons/ci";
 
 const ExplorePage = () => {
   const [userData, setUserData] = useRecoilState(userAtom);
@@ -110,13 +111,25 @@ const ExplorePage = () => {
       )}
 
       <div className="flex flex-col sm:flex-row justify-center items-center mb-6 space-y-4 sm:space-y-0 sm:space-x-4">
-        <input
-          type="text"
-          placeholder={`Enter ${searchBy} in ${batch.toUpperCase()}`}
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          className="border border-gray-300 rounded p-2 bg-white shadow-md transition duration-200 ease-in-out focus:ring-2 focus:ring-blue-400 focus:outline-none w-full sm:w-64"
-        />
+        <div className="relative w-full sm:w-64">
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder={`Enter ${searchBy} in ${batch.toUpperCase()}`}
+            className="border border-gray-300 rounded p-2 pr-10 bg-white shadow-md
+      transition duration-200 ease-in-out focus:ring-2 focus:ring-blue-400
+      focus:outline-none w-full"
+          />
+
+          {inputValue && (
+            <CiCircleRemove
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
+              size={20} // Adjust size as needed
+              onClick={() => setInputValue("")}
+            />
+          )}
+        </div>
 
         <div className="flex space-x-4 w-full sm:w-auto">
           <select
@@ -134,12 +147,12 @@ const ExplorePage = () => {
             className="border border-gray-300 rounded p-2 bg-white shadow-md transition duration-200 ease-in-out focus:ring-2 focus:ring-blue-400 focus:outline-none w-full sm:w-32"
           >
             <option value="r20">R20</option>
-            <option value="n20">N20</option>
+            {/* <option value="n20">N20</option> */}
           </select>
 
           <button className="rounded p-2 flex items-center justify-center transition duration-200">
             <ImFilter className="h-5 w-5" />
-          </button>        
+          </button>
         </div>
       </div>
 
@@ -149,9 +162,13 @@ const ExplorePage = () => {
             key={index}
             className="bg-white p-4 rounded-lg shadow-lg w-64 h-auto flex flex-col justify-between"
           >
-            <div className="h-40 bg-gray-500 rounded-lg mb-2 flex items-center justify-center">
-              <span className="text-white">Coming Soon</span>
-              {/* <img src={user.imageUrl} alt={user.NAME} className="h-32 w-full object-cover rounded-lg" /> */}
+            <div className="h-40 bg-gray-100 rounded-lg mb-2 flex items-center justify-center">
+              {batch == "n20" && <span className="text-black">Coming Soon</span>}
+              {batch == "r20" && <img
+                src={`https://raw.githubusercontent.com/pythonista69/r20/main/images/${user.ID}.jpg`}
+                alt={user.NAME}
+                className="w-full h-full object-contain max-h-60"
+              />}
             </div>
             <div>
               <h3 className="text-lg font-bold text-gray-800 mb-1">
@@ -164,7 +181,9 @@ const ExplorePage = () => {
               <p className="text-gray-600 mb-1">
                 DOB:{" "}
                 {user.DOB
-                  ? new Date(user.DOB.split('-').reverse().join('/')).toLocaleDateString()
+                  ? new Date(
+                      user.DOB.split("-").reverse().join("/")
+                    ).toLocaleDateString()
                   : "Not available"}
               </p>
               <p className="text-gray-600">
