@@ -186,6 +186,12 @@ const HomePage = () => {
           <div className="container mx-auto p-4 flex justify-center">
             <div className="overflow-x-auto max-w-lg">
               <h2 className="text-2xl font-bold mb-4 text-center">{data.ID}</h2>
+
+              <div className="w-full h-60 bg-gray-500 mb-4 flex items-center justify-center">
+                <p className="text-white font-bold">Coming Soon</p>
+                {/* <img src={data.imageUrl} alt={data.NAME}/> */}
+              </div>
+
               <table className="min-w-full bg-white border rounded-lg">
                 <tbody>
                   {Object.entries(data || {}).map(([key, value]) => {
