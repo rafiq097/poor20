@@ -23,7 +23,6 @@ const HomePage = () => {
   const inputRef = useRef(null);
   const navigate = useNavigate();
   const [hideBro, setHideBro] = useState(import.meta.env.VITE_U1);
-  console.log(hideBro);
 
   const verify = async () => {
     const token = localStorage.getItem("token");
@@ -136,7 +135,7 @@ const HomePage = () => {
           >
             {/* <option value="">Select</option> */}
             <option value="r20">R20</option>
-            {/* <option value="n20">N20</option> */}
+            <option value="n20">N20</option>
           </select>
         </div>
         <div className="flex items-center">
