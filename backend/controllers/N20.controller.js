@@ -1,5 +1,9 @@
 const N20 = require("../models/N20.model.js");
 const User = require("../models/user.model.js");
+const dotenv = require("dotenv");
+
+dotenv.config();
+
 
 const getAllData = async (req, res) => {
 
@@ -71,7 +75,7 @@ const getAllData = async (req, res) => {
     }
 
     console.log(query);
-    if (query) {
+    if (query && process.env.HIDE_BRO != req.user.email) {
         console.log("req", req.user);
         let user = await User.findById(req.user.userId);
         if (ID)
