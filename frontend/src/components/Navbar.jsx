@@ -74,7 +74,8 @@ function Navbar() {
   }
 
   return (
-    <div className="flex">
+    <div className="flex flex-col">
+      {/* Mobile Menu Button */}
       <div className="md:hidden p-4">
         <button onClick={toggleDrawer} className="focus:outline-none">
           {isDrawerOpen ? (
@@ -94,9 +95,8 @@ function Navbar() {
 
       <div
         className={`fixed inset-y-0 left-0 z-30 w-64 bg-gray-800 p-6 transform md:transform-none 
-      ${
-        isDrawerOpen ? "translate-x-0" : "-translate-x-full"
-      } transition-transform duration-300 ease-in-out md:block`}
+        ${isDrawerOpen ? "translate-x-0" : "-translate-x-full"}
+        transition-transform duration-300 ease-in-out md:block`}
       >
         <div className="text-white flex flex-col h-full">
           <div className="text-center text-xl font-bold mb-5 tracking-wide font-sans">
@@ -131,7 +131,7 @@ function Navbar() {
         </div>
       </div>
 
-      <div className="flex-1 p-6 md:ml-64">
+      <div className="flex-1 md:ml-64 pt-0">
         <h1 className="flex items-center justify-center text-xl font-bold font-sans text-gray-800">
           20
         </h1>

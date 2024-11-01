@@ -203,7 +203,7 @@ const ExplorePage = () => {
       {/* Filter Modal */}
       {showFilter && (
         <div
-          className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
           onClick={() => setShowFilter(false)}
         >
           <div
@@ -211,35 +211,110 @@ const ExplorePage = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <h2 className="text-xl font-semibold mb-4 border-b pb-2">
-              Filter Options
+              Filter
             </h2>
 
-            <div className="grid grid-cols-2 gap-4">
-              {/* Input Fields */}
-              {[
-                { placeholder: "ID", key: "ID" },
-                { placeholder: "Name", key: "NAME" },
-                { placeholder: "School", key: "SCHOOL" },
-                { placeholder: "Phone", key: "PHONE" },
-                { placeholder: "Gender", key: "GENDER" },
-                { placeholder: "Caste", key: "CASTE" },
-                { placeholder: "Mandal", key: "MANDAL" },
-                { placeholder: "District", key: "DISTRICT" },
-                { placeholder: "P1", key: "P1" },
-                { placeholder: "P2", key: "P2" },
-                { placeholder: "Stream", key: "STREAM" },
-                { placeholder: "Room", key: "ROOM" },
-                { placeholder: "Branch", key: "BRANCH" },
-                { placeholder: "Numeric Filters", key: "numericFilters" },
-              ].map((field) => (
-                <input
-                  key={field.key}
-                  type="text"
-                  placeholder={field.placeholder}
-                  className="border border-gray-300 rounded p-2 w-full focus:outline-none focus:ring focus:ring-blue-400"
-                  onChange={(e) => handleFilterChange(e, field.key)}
-                />
-              ))}
+            <div className="space-y-4">
+              
+              <div className="mb-4">
+                <label className="text-gray-700 font-semibold">
+                  DOB
+                </label>
+                <div className="flex items-center space-x-2 mt-2">
+                  <input
+                    type="date"
+                    placeholder="Min"
+                    className="border p-2 w-25"
+                    onChange={(e) =>
+                      handleFilterChange("minDate", e.target.value)
+                    }
+                  />
+                  <span>-</span>
+                  <input
+                    type="date"
+                    placeholder="Max"
+                    className="border p-2 w-25"
+                    onChange={(e) =>
+                      handleFilterChange("maxDate", e.target.value)
+                    }
+                  />
+                </div>
+              </div>
+
+              {/* Brand Filter */}
+              <div className="mb-4">
+                <label className="text-gray-700 font-semibold">Caste</label>
+                <div className="flex flex-wrap mt-2">
+                  {["OC", "EWS", "BC-A", "BC-B", "BC-C", "BC-D", "BC-E", "SC", "ST"].map((brand) => (
+                    <label
+                      key={brand}
+                      className="flex items-center space-x-1 mr-4"
+                    >
+                      <input
+                        type="checkbox"
+                        onChange={(e) => handleFilterChange("brand", brand)}
+                        className="form-checkbox"
+                      />
+                      <span>{brand}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <label className="text-gray-700 font-semibold">Bramch</label>
+                <div className="flex flex-wrap mt-2">
+                  {["CSE", "ECE", "EEE", "CIVIL", "MECH", "CHE", "MME"].map((brand) => (
+                    <label
+                      key={brand}
+                      className="flex items-center space-x-1 mr-4"
+                    >
+                      <input
+                        type="checkbox"
+                        onChange={(e) => handleFilterChange("brand", brand)}
+                        className="form-checkbox"
+                      />
+                      <span>{brand}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Ratings Filter */}
+              <div className="mb-4">
+                <label className="text-gray-700 font-semibold">Ratings</label>
+                <div className="flex flex-wrap mt-2">
+                  {[4, 3, 2, 1].map((rating) => (
+                    <label
+                      key={rating}
+                      className="flex items-center space-x-1 mr-4"
+                    >
+                      <input
+                        type="checkbox"
+                        onChange={(e) => handleFilterChange("rating", rating)}
+                        className="form-checkbox"
+                      />
+                      <span>{rating} & Up</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <label className="text-gray-700 font-semibold">
+                  Gender
+                </label>
+                <select
+                  className="border p-2 w-full rounded"
+                  onChange={(e) =>
+                    handleFilterChange("gender", e.target.value)
+                  }
+                >
+                  <option value="">Select</option>
+                  <option value="male">Male</option>
+                  <option value="female">FeMale</option>
+                </select>
+              </div>
             </div>
 
             <div className="mt-4 flex justify-between">
@@ -253,10 +328,10 @@ const ExplorePage = () => {
                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200"
                 onClick={() => {
                   setShowFilter(false);
-                  // Handle filter submission logic
+                  // Apply Filters
                 }}
               >
-                Done
+                Apply Filters
               </button>
             </div>
           </div>
