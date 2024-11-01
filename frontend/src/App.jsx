@@ -25,18 +25,13 @@ function App() {
   return (
     <>
       <div className="flex flex-col min-h-screen">
-        {userData && <Navbar />}
-        {/* <div className="flex-1 p-4 pt-2 md:ml-64">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route
-              path="/login"
-              element={!userData ? <LoginPage /> : navigate("/")}
-            />
-          </Routes>
-        </div> */}
+        {userData && (
+          <div className="sticky top-0 z-10 bg-white">
+            <Navbar />
+          </div>
+        )}
 
-        {(location.pathname === "/" || location.pathname === "/explore") ? (
+        {location.pathname === "/" || location.pathname === "/explore" ? (
           <div className="flex-1 p-4 pt-2 md:ml-64">
             <Routes>
               <Route path="/" element={<HomePage />} />

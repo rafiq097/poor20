@@ -60,7 +60,7 @@ const getAllData = async (req, res) => {
 
         console.log(filters);
 
-        const options = ['ID', 'P1S1', 'P1S2', 'P2S1', 'P2S2', 'E1S1', 'E1S2', 'THE_AVG', 'PUC_GPA', 'RANK', 'ENGG_AVG'];
+        const options = ['ID', 'P1S1', 'P1S2', 'P2S1', 'P2S2', 'E1S1', 'E1S2', 'E2S1', 'E2S2', 'THE_AVG', 'PUC_GPA', 'RANK', 'ENGG_AVG'];
         filters = filters.split(',').forEach((item) => {
             const [field, operator, value] = item.split('#');
             if (field === 'ID') {
