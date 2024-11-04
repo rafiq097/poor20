@@ -10,8 +10,8 @@ import "./index.css";
 
 axios.interceptors.request.use(
   function (config) {
-    config.baseURL = "http://localhost:5000";
-    // config.baseURL = "https://poor20.onrender.com"
+    // config.baseURL = "http://localhost:5000";
+    config.baseURL = "https://poor20.onrender.com"
     return config;
   },
   function (error) {
