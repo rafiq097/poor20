@@ -41,7 +41,6 @@ userSchema.pre('save', function (next) {
         this.time = toIST(this.time);
     }
     this.updatedAt = toIST(new Date());
-    this.time = toIST(this.time);
     next();
 });
 
