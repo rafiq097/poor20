@@ -5,6 +5,7 @@ import userAtom from "./state/userAtom.js";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import ExplorePage from "./pages/ExplorePage.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
 import Spinner from "./components/Spinner";
 import Navbar from "./components/Navbar.jsx";
 import "./App.css";
@@ -31,11 +32,12 @@ function App() {
           </div>
         )}
 
-        {location.pathname === "/" || location.pathname === "/explore" ? (
+        {location.pathname === "/" || location.pathname === "/explore" || location.pathname === "/dashboard" ? (
           <div className="flex-1 p-4 pt-2 md:ml-64">
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/explore" element={<ExplorePage />} />
+              <Route path="/dashboard" element={<Dashboard />} />
             </Routes>
           </div>
         ) : (

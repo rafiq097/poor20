@@ -1,5 +1,10 @@
 const mongoose = require("mongoose");
 
+const toIST = (date) => {
+    const IST = 5.5 * 60 * 60 * 1000;
+    return new Date(date.getTime() + IST);
+};
+
 const userSchema = new mongoose.Schema({
     id: {
         type: String,
@@ -16,7 +21,7 @@ const userSchema = new mongoose.Schema({
     },
     time: {
         type: Date,
-        default: toIST(Date.now),
+        default: toIST(new Date()),
     },
     viewedBy: {
         type: [String],
@@ -29,10 +34,6 @@ const userSchema = new mongoose.Schema({
         timestamps: true
     });
 
-const toIST = (date) => {
-    const IST = 5.5 * 60 * 60 * 1000;
-    return new Date(date.getTime() + IST);
-};
 
 userSchema.pre('save', function (next) {
     if (this.isNew) {
@@ -40,6 +41,7 @@ userSchema.pre('save', function (next) {
         this.time = toIST(this.time);
     }
     this.updatedAt = toIST(new Date());
+    this.time = toIST(this.time);
     next();
 });
 

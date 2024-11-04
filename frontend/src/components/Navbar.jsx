@@ -17,6 +17,7 @@ function Navbar() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [userData, setUserData] = useRecoilState(userAtom);
   const [loading, setLoading] = useState(true);
+  const [adminBro, setAdminBro] = useState(import.meta.env.VITE_ADMIN);
   const navigate = useNavigate();
 
   const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
@@ -119,6 +120,14 @@ function Navbar() {
               <FaChartBar className="h-6 w-6 text-gray-300" />
               <span className="text-sm font-semibold">Xplore</span>
             </li>
+
+            {adminBro.includes(userData.email) && <li
+              className="flex items-center space-x-3 p-3 cursor-pointer hover:bg-gray-700 rounded-lg transition-colors duration-200"
+              onClick={() => handleNavigation("/dashboard")}
+            >
+              <FaChartBar className="h-6 w-6 text-gray-300" />
+              <span className="text-sm font-semibold">DashBoard</span>
+            </li>}
 
             <li
               className="flex items-center space-x-3 p-3 cursor-pointer hover:bg-red-600 rounded-lg transition-colors duration-200"
