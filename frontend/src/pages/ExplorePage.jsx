@@ -21,8 +21,11 @@ const ExplorePage = () => {
     minDate: "",
     maxDate: "",
     caste: [],
-    puc: "",
-    engg: ""
+    branch: [],
+    pucMin: "",
+    pucMax: "",
+    enggMin: "",
+    enggMax: "",
   });
   const [hideBro, setHideBro] = useState(import.meta.env.VITE_U1);
   const navigate = useNavigate();
@@ -103,8 +106,44 @@ const ExplorePage = () => {
     };
   }, [inputValue]);
 
-  const handleFilterChange = () => {
 
+  useEffect( async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
+      const res = await axios.get(`/${batch}/?${searchBy}=${inputValue}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUsers(res.data.data);
+    } catch (err) {
+      console.log(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [filters]);
+
+  const handleFilterChange = (filterName, value) => {
+    if (filterName === "caste" || filterName === "branch") {
+      setFilters((prevFilters) => {
+        const currentValues = prevFilters[filterName];
+        const updatedValues = currentValues.includes(value)
+          ? currentValues.filter((item) => item !== value)
+          : [...currentValues, value];
+        return { ...prevFilters, [filterName]: updatedValues };
+      });
+    } else {
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        [filterName]: value,
+      }));
+    }
+
+
+  };
+
+  const applyFilters = () => {
+    console.log("Applied Filters:", filters);
+    setShowFilter(false);
   };
 
   return (
@@ -221,16 +260,11 @@ const ExplorePage = () => {
             className="bg-white rounded-lg shadow-lg p-6 w-full max-w-xl relative"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 className="text-xl font-semibold mb-4 border-b pb-2">
-              Filter
-            </h2>
+            <h2 className="text-xl font-semibold mb-4 border-b pb-2">Filter</h2>
 
             <div className="space-y-4">
-              
               <div className="mb-4">
-                <label className="text-gray-700 font-semibold">
-                  DOB
-                </label>
+                <label className="text-gray-700 font-semibold">DOB</label>
                 <div className="flex items-center space-x-2 mt-2">
                   <input
                     type="date"
@@ -252,11 +286,21 @@ const ExplorePage = () => {
                 </div>
               </div>
 
-              {/* Brand Filter */}
+              {/* Caste Filter */}
               <div className="mb-4">
                 <label className="text-gray-700 font-semibold">Caste</label>
                 <div className="flex flex-wrap mt-2">
-                  {["OC", "EWS", "BC-A", "BC-B", "BC-C", "BC-D", "BC-E", "SC", "ST"].map((caste) => (
+                  {[
+                    "OC",
+                    "EWS",
+                    "BC-A",
+                    "BC-B",
+                    "BC-C",
+                    "BC-D",
+                    "BC-E",
+                    "SC",
+                    "ST",
+                  ].map((caste) => (
                     <label
                       key={caste}
                       className="flex items-center space-x-1 mr-4"
@@ -272,74 +316,93 @@ const ExplorePage = () => {
                 </div>
               </div>
 
+              {/* Branch Filter */}
               <div className="mb-4">
-                <label className="text-gray-700 font-semibold">Bramch</label>
+                <label className="text-gray-700 font-semibold">Branch</label>
                 <div className="flex flex-wrap mt-2">
-                  {["CSE", "ECE", "EEE", "CIVIL", "MECH", "CHE", "MME"].map((branch) => (
-                    <label
-                      key={branch}
-                      className="flex items-center space-x-1 mr-4"
-                    >
-                      <input
-                        type="checkbox"
-                        onChange={(e) => handleFilterChange("branch", branch)}
-                        className="form-checkbox"
-                      />
-                      <span>{branch}</span>
-                    </label>
-                  ))}
+                  {["CSE", "ECE", "EEE", "CIVIL", "MECH", "CHE", "MME"].map(
+                    (branch) => (
+                      <label
+                        key={branch}
+                        className="flex items-center space-x-1 mr-4"
+                      >
+                        <input
+                          type="checkbox"
+                          onChange={(e) => handleFilterChange("branch", branch)}
+                          className="form-checkbox"
+                        />
+                        <span>{branch}</span>
+                      </label>
+                    )
+                  )}
                 </div>
               </div>
 
-              {/* Ratings Filter */}
+              {/* PUC GPA Filter */}
               <div className="mb-4">
-                <label className="text-gray-700 font-semibold">Ratings</label>
-                <div className="flex flex-wrap mt-2">
-                  {[4, 3, 2, 1].map((rating) => (
-                    <label
-                      key={rating}
-                      className="flex items-center space-x-1 mr-4"
-                    >
-                      <input
-                        type="checkbox"
-                        onChange={(e) => handleFilterChange("rating", rating)}
-                        className="form-checkbox"
-                      />
-                      <span>{rating} & Up</span>
-                    </label>
-                  ))}
+                <label className="text-gray-700 font-semibold">PUC GPA</label>
+                <div className="flex items-center space-x-2 mt-2">
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    max="10"
+                    placeholder="Min GPA"
+                    className="border p-2 w-25"
+                    onChange={(e) =>
+                      handleFilterChange("pucMin", e.target.value)
+                    }
+                  />
+                  <span>-</span>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    max="10"
+                    placeholder="Max GPA"
+                    className="border p-2 w-25"
+                    onChange={(e) =>
+                      handleFilterChange("pucMax", e.target.value)
+                    }
+                  />
                 </div>
               </div>
 
+              {/* Engg GPA Filter */}
               <div className="mb-4">
-                <label className="text-gray-700 font-semibold">
-                  Gender
-                </label>
-                <select
-                  className="border p-2 w-full rounded"
-                  onChange={(e) =>
-                    handleFilterChange("gender", e.target.value)
-                  }
-                >
-                  <option value="">Select</option>
-                  <option value="male">Male</option>
-                  <option value="female">FeMale</option>
-                </select>
+                <label className="text-gray-700 font-semibold">Engg GPA</label>
+                <div className="flex items-center space-x-2 mt-2">
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    max="10"
+                    placeholder="Min GPA"
+                    className="border p-2 w-25"
+                    onChange={(e) =>
+                      handleFilterChange("enggMin", e.target.value)
+                    }
+                  />
+                  <span>-</span>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    max="10"
+                    placeholder="Max GPA"
+                    className="border p-2 w-25"
+                    onChange={(e) =>
+                      handleFilterChange("enggMax", e.target.value)
+                    }
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="mt-4 flex justify-between">
               <button
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition duration-200"
-                onClick={() => setShowFilter(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200"
+                className="bg-blue-500 text-white p-2 rounded w-full"
                 onClick={() => {
                   setShowFilter(false);
-                  // Apply Filters
+                  onClick={applyFilters}
                 }}
               >
                 Apply Filters
