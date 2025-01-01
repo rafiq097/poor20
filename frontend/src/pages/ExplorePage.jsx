@@ -17,6 +17,13 @@ const ExplorePage = () => {
   const [debouncedInput, setDebouncedInput] = useState(inputValue);
   const [users, setUsers] = useState([]);
   const [showFilter, setShowFilter] = useState(false);
+  const [filters, setFilters] = useState({
+    minDate: "",
+    maxDate: "",
+    caste: [],
+    puc: "",
+    engg: ""
+  });
   const [hideBro, setHideBro] = useState(import.meta.env.VITE_U1);
   const navigate = useNavigate();
 
@@ -95,6 +102,10 @@ const ExplorePage = () => {
       clearTimeout(handler);
     };
   }, [inputValue]);
+
+  const handleFilterChange = () => {
+
+  };
 
   return (
     <div className="min-h-screen p-4 relative">
@@ -245,17 +256,17 @@ const ExplorePage = () => {
               <div className="mb-4">
                 <label className="text-gray-700 font-semibold">Caste</label>
                 <div className="flex flex-wrap mt-2">
-                  {["OC", "EWS", "BC-A", "BC-B", "BC-C", "BC-D", "BC-E", "SC", "ST"].map((brand) => (
+                  {["OC", "EWS", "BC-A", "BC-B", "BC-C", "BC-D", "BC-E", "SC", "ST"].map((caste) => (
                     <label
-                      key={brand}
+                      key={caste}
                       className="flex items-center space-x-1 mr-4"
                     >
                       <input
                         type="checkbox"
-                        onChange={(e) => handleFilterChange("brand", brand)}
+                        onChange={(e) => handleFilterChange("caste", caste)}
                         className="form-checkbox"
                       />
-                      <span>{brand}</span>
+                      <span>{caste}</span>
                     </label>
                   ))}
                 </div>
@@ -264,17 +275,17 @@ const ExplorePage = () => {
               <div className="mb-4">
                 <label className="text-gray-700 font-semibold">Bramch</label>
                 <div className="flex flex-wrap mt-2">
-                  {["CSE", "ECE", "EEE", "CIVIL", "MECH", "CHE", "MME"].map((brand) => (
+                  {["CSE", "ECE", "EEE", "CIVIL", "MECH", "CHE", "MME"].map((branch) => (
                     <label
-                      key={brand}
+                      key={branch}
                       className="flex items-center space-x-1 mr-4"
                     >
                       <input
                         type="checkbox"
-                        onChange={(e) => handleFilterChange("brand", brand)}
+                        onChange={(e) => handleFilterChange("branch", branch)}
                         className="form-checkbox"
                       />
-                      <span>{brand}</span>
+                      <span>{branch}</span>
                     </label>
                   ))}
                 </div>
