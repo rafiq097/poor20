@@ -101,25 +101,39 @@ const ExplorePage = () => {
       setDebouncedInput(inputValue);
     }, 1000);
 
-    return () => {
-      clearTimeout(handler);
-    };
+    return () => clearTimeout(handler);
   }, [inputValue]);
 
+  useEffect(() => {
+    const fetchFilteredData = async () => {
+      try {
+        setLoading(true);
+        const token = localStorage.getItem("token");
 
-  useEffect( async () => {
-    try {
-      setLoading(true);
-      const token = localStorage.getItem("token");
-      const res = await axios.get(`/${batch}/?${searchBy}=${inputValue}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setUsers(res.data.data);
-    } catch (err) {
-      console.log(err.message);
-    } finally {
-      setLoading(false);
-    }
+        let url = new URLSearchParams();
+        Object.keys(filters).forEach((key) => {
+          const value = filters[key];
+          if (Array.isArray(value) && value.length > 0) {
+            url.append(key, value.join(","));
+          } else if (value !== undefined && value !== null) {
+            url.append(key, value);
+          }
+        });
+        url = url.toString();
+        console.log(url);
+
+        const res = await axios.get(`/${batch}/${url}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUsers(res.data.data);
+      } catch (err) {
+        console.log(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFilteredData();
   }, [filters]);
 
   const handleFilterChange = (filterName, value) => {
@@ -137,8 +151,6 @@ const ExplorePage = () => {
         [filterName]: value,
       }));
     }
-
-
   };
 
   const applyFilters = () => {
@@ -270,6 +282,7 @@ const ExplorePage = () => {
                     type="date"
                     placeholder="Min"
                     className="border p-2 w-25"
+                    value={filters.minDate || ""}
                     onChange={(e) =>
                       handleFilterChange("minDate", e.target.value)
                     }
@@ -279,6 +292,7 @@ const ExplorePage = () => {
                     type="date"
                     placeholder="Max"
                     className="border p-2 w-25"
+                    value={filters.maxDate || ""}
                     onChange={(e) =>
                       handleFilterChange("maxDate", e.target.value)
                     }
@@ -307,6 +321,7 @@ const ExplorePage = () => {
                     >
                       <input
                         type="checkbox"
+                        checked={filters.caste?.includes(caste) || false}
                         onChange={(e) => handleFilterChange("caste", caste)}
                         className="form-checkbox"
                       />
@@ -328,6 +343,7 @@ const ExplorePage = () => {
                       >
                         <input
                           type="checkbox"
+                          checked={filters.branch?.includes(branch) || false}
                           onChange={(e) => handleFilterChange("branch", branch)}
                           className="form-checkbox"
                         />
@@ -349,6 +365,7 @@ const ExplorePage = () => {
                     max="10"
                     placeholder="Min GPA"
                     className="border p-2 w-25"
+                    value={filters.pucMin || ""}
                     onChange={(e) =>
                       handleFilterChange("pucMin", e.target.value)
                     }
@@ -361,6 +378,7 @@ const ExplorePage = () => {
                     max="10"
                     placeholder="Max GPA"
                     className="border p-2 w-25"
+                    value={filters.pucMax || ""}
                     onChange={(e) =>
                       handleFilterChange("pucMax", e.target.value)
                     }
@@ -379,6 +397,7 @@ const ExplorePage = () => {
                     max="10"
                     placeholder="Min GPA"
                     className="border p-2 w-25"
+                    value={filters.enggMin || ""}
                     onChange={(e) =>
                       handleFilterChange("enggMin", e.target.value)
                     }
@@ -391,6 +410,7 @@ const ExplorePage = () => {
                     max="10"
                     placeholder="Max GPA"
                     className="border p-2 w-25"
+                    value={filters.enggMax || ""}
                     onChange={(e) =>
                       handleFilterChange("enggMax", e.target.value)
                     }
@@ -402,7 +422,7 @@ const ExplorePage = () => {
                 className="bg-blue-500 text-white p-2 rounded w-full"
                 onClick={() => {
                   setShowFilter(false);
-                  onClick={applyFilters}
+                  applyFilters();
                 }}
               >
                 Apply Filters
