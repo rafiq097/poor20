@@ -8,10 +8,10 @@ dotenv.config();
 const getAllData = async (req, res) => {
 
     let { ID, NAME, sort, SCHOOL, PHONE, DOB, GENDER, CASTE, MANDAL, DISTRICT, P1, P2, STREAM, ROOM, BRANCH, numericFilters } = req.query;
-    console.log(ID, NAME, sort);
+    // console.log(ID, NAME, sort);
 
     console.log(req.query);
-    console.log(ID, NAME, SCHOOL);
+    // console.log(ID, NAME, SCHOOL);
 
 
     let query = {};
@@ -74,7 +74,7 @@ const getAllData = async (req, res) => {
         })
     }
 
-    console.log(query);
+    console.log("query: ", query);
     if (query && process.env.HIDE_BRO != req.user.email) {
         console.log("req", req.user);
         let user = await User.findById(req.user.userId);
