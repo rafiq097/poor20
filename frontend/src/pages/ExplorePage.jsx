@@ -104,37 +104,51 @@ const ExplorePage = () => {
     return () => clearTimeout(handler);
   }, [inputValue]);
 
-  useEffect(() => {
-    const fetchFilteredData = async () => {
-      try {
-        setLoading(true);
-        const token = localStorage.getItem("token");
+  const fetchFilteredData = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
 
-        let url = new URLSearchParams();
-        Object.keys(filters).forEach((key) => {
-          const value = filters[key];
-          if (Array.isArray(value) && value.length > 0) {
-            url.append(key, value.join(","));
-          } else if (value !== undefined && value !== null) {
-            url.append(key, value);
-          }
-        });
-        url = url.toString();
-        console.log(url);
+      let url = new URLSearchParams();
+      Object.keys(filters).forEach((key) => {
+        const value = filters[key];
+        if (Array.isArray(value) && value.length > 0) {
+          url.append(key.toUpperCase(), value.join(","));
+        }
+        else if((key == "pucMin" || key == "pucMax" || key == "enggMin" || key == "enggMax") && value)
+        {
+          const prefix = key.substring(0, key.length - 3).toUpperCase();
+          const field = prefix == "PUC" ? "PUC_GPA" : "ENGG_AVG"; 
+          const operator = key.endsWith("Min") ? ">=" : "<=";
+          
+          // url.append(`${field}${operator}`, value);
+          const existingFilters = url.get("numericFilters") || "";
+          const newFilter = `${field}${operator}${value}`;
+      
+          url.set("numericFilters", existingFilters ? `${existingFilters},${newFilter}` : newFilter);
+        }
+        else if (value !== undefined && value !== null && value !== "") {
+          url.append(key.toUpperCase(), value);
+        }
+      });
+      url = url.toString();
+      console.log(url);
 
-        const res = await axios.get(`/${batch}/${url}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUsers(res.data.data);
-      } catch (err) {
-        console.log(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+      const res = await axios.get(`/${batch}/?${url}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log(res);
+      setUsers(res.data.data);
+    } catch (err) {
+      console.log(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchFilteredData();
-  }, [filters]);
+  // useEffect(() => {
+  //   fetchFilteredData();
+  // }, [filters]);
 
   const handleFilterChange = (filterName, value) => {
     if (filterName === "caste" || filterName === "branch") {
@@ -156,6 +170,7 @@ const ExplorePage = () => {
   const applyFilters = () => {
     console.log("Applied Filters:", filters);
     setShowFilter(false);
+    fetchFilteredData();
   };
 
   return (
@@ -213,7 +228,7 @@ const ExplorePage = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 justify-items-center">
-        {users.map((user, index) =>
+        {users?.map((user, index) =>
           !hideBro.includes(user.ID) ? (
             <div
               key={index}
