@@ -108,8 +108,8 @@ const getAllData = async (req, res) => {
     if (sort) {
         const sortFields = sort.split(',');
         const options = sortFields.join(' ');
-        console.log(options);
-        console.log(typeof (options));
+        // console.log(options);
+        // console.log(typeof (options));
         sortFields.forEach(field => {
             if (field.startsWith('-')) {
                 field = field.substring(1);
@@ -121,8 +121,8 @@ const getAllData = async (req, res) => {
         });
 
         console.log(query);
-        // result = result.sort(options);
-        result = User.find(query).sort(options);
+        result = result.sort(options);
+        // result = User.find(query).sort(options);
         console.log(`Sorted by ${options}`);
         // console.log(result);
     }
@@ -130,8 +130,8 @@ const getAllData = async (req, res) => {
         result = result.sort('ID');
     }
 
-    //select
-
+    //Select
+    //select certain fields only
 
     //Page
     const page = req.query.page || 1;
@@ -142,7 +142,7 @@ const getAllData = async (req, res) => {
 
     let data = await result.exec();
     data = data.map((user, index) => ({
-        '#': index + 1,
+        'num': index + 1,
         ...user._doc
     }));
 

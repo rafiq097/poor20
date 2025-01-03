@@ -18,8 +18,8 @@ const ExplorePage = () => {
   const [users, setUsers] = useState([]);
   const [showFilter, setShowFilter] = useState(false);
   const [filters, setFilters] = useState({
-    minDate: "",
-    maxDate: "",
+    sortBy: "",
+    sortOrder: "",
     caste: [],
     branch: [],
     pucMin: "",
@@ -111,26 +111,40 @@ const ExplorePage = () => {
 
       let url = new URLSearchParams();
       Object.keys(filters).forEach((key) => {
+        if (key == "sortBy" || key == "sortOrder") return;
+
         const value = filters[key];
         if (Array.isArray(value) && value.length > 0) {
           url.append(key.toUpperCase(), value.join(","));
-        }
-        else if((key == "pucMin" || key == "pucMax" || key == "enggMin" || key == "enggMax") && value)
-        {
+        } else if (
+          (key == "pucMin" ||
+            key == "pucMax" ||
+            key == "enggMin" ||
+            key == "enggMax") &&
+          value
+        ) {
           const prefix = key.substring(0, key.length - 3).toUpperCase();
-          const field = prefix == "PUC" ? "PUC_GPA" : "ENGG_AVG"; 
+          const field = prefix == "PUC" ? "PUC_GPA" : "ENGG_AVG";
           const operator = key.endsWith("Min") ? ">=" : "<=";
-          
+
           // url.append(`${field}${operator}`, value);
           const existingFilters = url.get("numericFilters") || "";
           const newFilter = `${field}${operator}${value}`;
-      
-          url.set("numericFilters", existingFilters ? `${existingFilters},${newFilter}` : newFilter);
-        }
-        else if (value !== undefined && value !== null && value !== "") {
+
+          url.set(
+            "numericFilters",
+            existingFilters ? `${existingFilters},${newFilter}` : newFilter
+          );
+        } else if (value !== undefined && value !== null && value !== "") {
           url.append(key.toUpperCase(), value);
         }
       });
+
+      if (filters.sortBy) {
+        const sortPrefix = filters.sortOrder === "desc" ? "-" : "";
+        url.append("sort", `${sortPrefix}${filters.sortBy}`);
+      }
+
       url = url.toString();
       console.log(url);
 
@@ -248,7 +262,7 @@ const ExplorePage = () => {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-gray-800 mb-1">
-                  {user.NAME || "Unknown User"}
+                  {user.num}) {user.NAME || "Unknown User"}
                 </h3>
                 <p className="text-gray-700 mb-1 font-semibold">
                   ID: {user.ID}
@@ -268,9 +282,13 @@ const ExplorePage = () => {
                         ).toLocaleDateString()
                     : "Not available"}
                 </p>
-                <p className="text-gray-600">
+                <p className="text-gray-600 mb-1">
                   Branch: {user.BRANCH || "Not specified"}
                 </p>
+                <p className="text-gray-600 mb-1">
+                  PUC: {user.PUC_GPA || "N/A"}
+                </p>
+                <p className="text-gray-600">ENGG: {user.ENGG_AVG || "N/A"}</p>
               </div>
             </div>
           ) : null
@@ -291,27 +309,32 @@ const ExplorePage = () => {
 
             <div className="space-y-4">
               <div className="mb-4">
-                <label className="text-gray-700 font-semibold">DOB</label>
+                <label className="text-gray-700 font-semibold">Sort By</label>
                 <div className="flex items-center space-x-2 mt-2">
-                  <input
-                    type="date"
-                    placeholder="Min"
-                    className="border p-2 w-25"
-                    value={filters.minDate || ""}
+                  <select
+                    className="border p-2 w-40"
+                    value={filters.sortBy || ""}
                     onChange={(e) =>
-                      handleFilterChange("minDate", e.target.value)
+                      handleFilterChange("sortBy", e.target.value)
                     }
-                  />
-                  <span>-</span>
-                  <input
-                    type="date"
-                    placeholder="Max"
-                    className="border p-2 w-25"
-                    value={filters.maxDate || ""}
+                  >
+                    <option value="">Select Field</option>
+                    <option value="ID">ID</option>
+                    <option value="NAME">Name</option>
+                    <option value="PUC_GPA">PUC_GPA</option>
+                    <option value="ENGG_AVG">ENGG_AVG</option>
+                  </select>
+                  <select
+                    className="border p-2 w-40"
+                    value={filters.sortOrder || ""}
                     onChange={(e) =>
-                      handleFilterChange("maxDate", e.target.value)
+                      handleFilterChange("sortOrder", e.target.value)
                     }
-                  />
+                  >
+                    <option value="">Select Order</option>
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                  </select>
                 </div>
               </div>
 
