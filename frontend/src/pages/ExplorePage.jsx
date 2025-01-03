@@ -28,6 +28,7 @@ const ExplorePage = () => {
     enggMax: "",
   });
   const [hideBro, setHideBro] = useState(import.meta.env.VITE_U1);
+  const [admins, setAdmins] = useState(import.meta.env.VITE_ADMIN);
   const navigate = useNavigate();
 
   const verify = async () => {
@@ -243,7 +244,7 @@ const ExplorePage = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 justify-items-center">
         {users?.map((user, index) =>
-          !hideBro.includes(user.ID) ? (
+          !hideBro.includes(user.ID) || admins.includes(userData.email) ? (
             <div
               key={index}
               className="bg-white p-4 rounded-lg shadow-lg w-64 h-auto flex flex-col justify-between"
