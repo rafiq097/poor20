@@ -310,7 +310,7 @@ const ExplorePage = () => {
             <h2 className="text-xl font-semibold mb-4 border-b pb-2">Filter</h2>
 
             <div className="space-y-4">
-              <div className="mb-4">
+              <div className="mb-3">
                 <label className="text-gray-700 font-semibold">Sort By</label>
                 <div className="flex items-center space-x-2 mt-2">
                   <select
@@ -341,7 +341,7 @@ const ExplorePage = () => {
               </div>
 
               {/* // Gender */}
-              <div className="mb-4">
+              <div className="mb-3">
                 <label className="text-gray-700 font-semibold">Gender</label>
                 <div className="flex items-center space-x-2 mt-2">
                   <select
@@ -359,7 +359,7 @@ const ExplorePage = () => {
               </div>
 
               {/* Caste Filter */}
-              <div className="mb-4">
+              <div className="mb-3">
                 <label className="text-gray-700 font-semibold">Caste</label>
                 <div className="flex flex-wrap mt-2">
                   {[
@@ -390,7 +390,7 @@ const ExplorePage = () => {
               </div>
 
               {/* Branch Filter */}
-              <div className="mb-4">
+              <div className="mb-3">
                 <label className="text-gray-700 font-semibold">Branch</label>
                 <div className="flex flex-wrap mt-2">
                   {["CSE", "ECE", "EEE", "CIVIL", "MECH", "CHE", "MME"].map(
@@ -413,7 +413,7 @@ const ExplorePage = () => {
               </div>
 
               {/* PUC GPA Filter */}
-              <div className="mb-4">
+              <div className="mb-3">
                 <label className="text-gray-700 font-semibold">PUC GPA</label>
                 <div className="flex items-center space-x-2 mt-2">
                   <input
@@ -445,7 +445,7 @@ const ExplorePage = () => {
               </div>
 
               {/* Engg GPA Filter */}
-              <div className="mb-4">
+              <div className="mb-3">
                 <label className="text-gray-700 font-semibold">Engg GPA</label>
                 <div className="flex items-center space-x-2 mt-2">
                   <input
