@@ -77,13 +77,16 @@ const getAllData = async (req, res) => {
     console.log("query: ", query);
     if (query && process.env.HIDE_BRO != req.user.email) {
         console.log("req", req.user);
+
         let user = await User.findById(req.user.userId);
+        let time = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+
         if (ID)
             if(!user.viewed.includes(ID) && ID.length > 6)
-                user.viewed.push(ID);
+                user.viewed.push(ID + "-" + time);
         if (NAME)
             if(!user.viewed.includes(NAME) && NAME.length > 6)
-                user.viewed.push(NAME);
+                user.viewed.push(NAME + "-" + time);
 
         await user.save();
         console.log(user);
