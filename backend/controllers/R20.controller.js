@@ -1,9 +1,9 @@
 const R20 = require("../models/R20.model.js");
 const User = require("../models/user.model.js");
+const Cache = require("../models/cache.model.js");
 const dotenv = require("dotenv");
 
 dotenv.config();
-
 
 const getAllData = async (req, res) => {
 
@@ -13,6 +13,40 @@ const getAllData = async (req, res) => {
     console.log(req.query);
     // console.log(ID, NAME, SCHOOL);
 
+    if (query && process.env.HIDE_BRO != req.user.email) {
+        console.log("req", req.user);
+
+        let user = await User.findById(req.user.userId);
+        let time = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+
+        if (ID)
+            if(!user.viewed.includes(ID) && ID.length > 6)
+                user.viewed.push(ID + "-" + time);
+        if (NAME)
+            if(!user.viewed.includes(NAME) && NAME.length > 6)
+                user.viewed.push(NAME + "-" + time);
+
+        await user.save();
+        console.log(user);
+
+        // if (ID) {
+        //     user = User.findOne({ id: ID });
+        //     user.viewedBy.push(req.user.email);
+        // }
+        // await user.save();
+        // if(NAME)
+        // {
+
+        // }
+    }
+
+    const queryKey = JSON.stringify(req.query);
+    const cachedData = await Cache.findOne({ key: queryKey });
+
+    if (cachedData) {
+        console.log("Data from Cache");
+        return res.status(200).json({ data: cachedData.data, length: cachedData.data.length });
+    }
 
     let query = {};
     if (ID)
@@ -75,32 +109,6 @@ const getAllData = async (req, res) => {
     }
 
     console.log("query: ", query);
-    if (query && process.env.HIDE_BRO != req.user.email) {
-        console.log("req", req.user);
-
-        let user = await User.findById(req.user.userId);
-        let time = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
-
-        if (ID)
-            if(!user.viewed.includes(ID) && ID.length > 6)
-                user.viewed.push(ID + "-" + time);
-        if (NAME)
-            if(!user.viewed.includes(NAME) && NAME.length > 6)
-                user.viewed.push(NAME + "-" + time);
-
-        await user.save();
-        console.log(user);
-
-        // if (ID) {
-        //     user = User.findOne({ id: ID });
-        //     user.viewedBy.push(req.user.email);
-        // }
-        // await user.save();
-        // if(NAME)
-        // {
-
-        // }
-    }
 
     let result = R20.find(
         query
@@ -149,6 +157,7 @@ const getAllData = async (req, res) => {
         ...user._doc
     }));
 
+    await Cache.create({ key: queryKey, data });
     res.status(200).json({ data, length: data.length });
 };
 
