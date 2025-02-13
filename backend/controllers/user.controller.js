@@ -21,8 +21,8 @@ const loginUser = async (req, res) => {
             console.log(user);
         }
 
-        const currentIST = toIST(new Date());
-        await User.findByIdAndUpdate(user._id, { time: currentIST }, { new: true });
+        let timeI = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+        await User.findByIdAndUpdate(user._id, { time: timeI }, { new: true });
 
         const token = jwt.sign(
             { userId: user._id, email: user.email, name: user.name },

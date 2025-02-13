@@ -20,6 +20,7 @@ const ExplorePage = () => {
   const [filters, setFilters] = useState({
     sortBy: "",
     sortOrder: "",
+    gender: "",
     caste: [],
     branch: [],
     pucMin: "",
@@ -339,6 +340,24 @@ const ExplorePage = () => {
                 </div>
               </div>
 
+              {/* // Gender */}
+              <div className="mb-4">
+                <label className="text-gray-700 font-semibold">Gender</label>
+                <div className="flex items-center space-x-2 mt-2">
+                  <select
+                    className="border p-2 w-40"
+                    value={filters.gender || ""}
+                    onChange={(e) =>
+                      handleFilterChange("gender", e.target.value)
+                    }
+                  >
+                    <option value="">Select</option>
+                    <option value="MALE">MALE</option>
+                    <option value="FEMALE">FEMALE</option>
+                  </select>
+                </div>
+              </div>
+
               {/* Caste Filter */}
               <div className="mb-4">
                 <label className="text-gray-700 font-semibold">Caste</label>
@@ -361,7 +380,7 @@ const ExplorePage = () => {
                       <input
                         type="checkbox"
                         checked={filters.caste?.includes(caste) || false}
-                        onChange={(e) => handleFilterChange("caste", caste)}
+                        onChange={() => handleFilterChange("caste", caste)}
                         className="form-checkbox"
                       />
                       <span>{caste}</span>
@@ -383,7 +402,7 @@ const ExplorePage = () => {
                         <input
                           type="checkbox"
                           checked={filters.branch?.includes(branch) || false}
-                          onChange={(e) => handleFilterChange("branch", branch)}
+                          onChange={() => handleFilterChange("branch", branch)}
                           className="form-checkbox"
                         />
                         <span>{branch}</span>
