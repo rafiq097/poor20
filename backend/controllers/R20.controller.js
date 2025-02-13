@@ -12,6 +12,7 @@ const getAllData = async (req, res) => {
 
     console.log(req.query);
     // console.log(ID, NAME, SCHOOL);
+    let query = {};
 
     if (query && process.env.HIDE_BRO != req.user.email) {
         console.log("req", req.user);
@@ -48,7 +49,6 @@ const getAllData = async (req, res) => {
         return res.status(200).json({ data: cachedData.data, length: cachedData.data.length });
     }
 
-    let query = {};
     if (ID)
         query['ID'] = { $regex: ID, $options: 'i', $exists: true };
     if (NAME)
