@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useRecoilState } from "recoil";
 import userAtom from "../state/userAtom.js";
@@ -12,6 +12,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import Spinner from "./Spinner.jsx";
 import axios from "axios";
+import { FaHome } from "react-icons/fa";
 
 function Navbar() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -77,7 +78,7 @@ function Navbar() {
   return (
     <div className="flex flex-col">
       {/* Mobile Menu Button */}
-      <div className="md:hidden p-4">
+      <div className="md:hidden p-4 flex items-center justify-between bg-gray-100 shadow-md">
         <button onClick={toggleDrawer} className="focus:outline-none">
           {isDrawerOpen ? (
             <FaTimes className="h-8 w-8 text-gray-700" />
@@ -85,6 +86,14 @@ function Navbar() {
             <FaBars className="h-8 w-8 text-gray-700" />
           )}
         </button>
+
+        {/* Home Icon */}
+        <div className="flex items-center justify-center ">
+          <FaHome
+            className="h-8 w-8 text-black cursor-pointer"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          />
+        </div>
       </div>
 
       {isDrawerOpen && (
@@ -100,8 +109,11 @@ function Navbar() {
         transition-transform duration-300 ease-in-out md:block`}
       >
         <div className="text-white flex flex-col h-full">
-          <div className="text-center text-xl font-bold mb-5 tracking-wide font-sans">
-            20
+          <div
+            className="text-center text-xl font-bold mb-5 tracking-wide font-sans cursor-pointer"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          >
+            <FaHome className="h-6 w-6 text-white" />
           </div>
 
           <ul className="flex-1 space-y-3">
@@ -121,13 +133,15 @@ function Navbar() {
               <span className="text-sm font-semibold">Xplore</span>
             </li>
 
-            {adminBro.includes(userData.email) && <li
-              className="flex items-center space-x-3 p-3 cursor-pointer hover:bg-gray-700 rounded-lg transition-colors duration-200"
-              onClick={() => handleNavigation("/dashboard")}
-            >
-              <FaChartBar className="h-6 w-6 text-gray-300" />
-              <span className="text-sm font-semibold">DashBoard</span>
-            </li>}
+            {adminBro.includes(userData.email) && (
+              <li
+                className="flex items-center space-x-3 p-3 cursor-pointer hover:bg-gray-700 rounded-lg transition-colors duration-200"
+                onClick={() => handleNavigation("/dashboard")}
+              >
+                <FaChartBar className="h-6 w-6 text-gray-300" />
+                <span className="text-sm font-semibold">DashBoard</span>
+              </li>
+            )}
 
             <li
               className="flex items-center space-x-3 p-3 cursor-pointer hover:bg-red-600 rounded-lg transition-colors duration-200"
@@ -140,11 +154,17 @@ function Navbar() {
         </div>
       </div>
 
-      <div className="flex-1 md:ml-64 pt-0">
-        <h1 className="flex items-center justify-center text-xl font-bold font-sans text-gray-800">
-          20
-        </h1>
-      </div>
+      {!isDrawerOpen && (
+  <div className="hidden md:block md:ml-64 pt-0 mt-4 mb-4">
+    <h1
+      className="flex items-center justify-center text-xl font-bold font-sans text-gray-800 cursor-pointer space-x-2"
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+    >
+      <FaHome className="h-6 w-6 text-black" />
+    </h1>
+  </div>
+)}
+
     </div>
   );
 }
