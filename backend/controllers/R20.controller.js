@@ -14,40 +14,13 @@ const getAllData = async (req, res) => {
     // console.log(ID, NAME, SCHOOL);
     let query = {};
 
-    if (query && process.env.HIDE_BRO != req.user.email) {
-        console.log("req", req.user);
+    // const queryKey = JSON.stringify(req.query);
+    // const cachedData = await Cache.findOne({ key: queryKey });
 
-        let user = await User.findById(req.user.userId);
-        let time = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
-
-        if (ID)
-            if(!user.viewed.includes(ID) && ID.length > 6)
-                user.viewed.push(ID + "-" + time);
-        if (NAME)
-            if(!user.viewed.includes(NAME) && NAME.length > 6)
-                user.viewed.push(NAME + "-" + time);
-
-        await user.save();
-        console.log(user);
-
-        // if (ID) {
-        //     user = User.findOne({ id: ID });
-        //     user.viewedBy.push(req.user.email);
-        // }
-        // await user.save();
-        // if(NAME)
-        // {
-
-        // }
-    }
-
-    const queryKey = JSON.stringify(req.query);
-    const cachedData = await Cache.findOne({ key: queryKey });
-
-    if (cachedData) {
-        console.log("Data from Cache");
-        return res.status(200).json({ data: cachedData.data, length: cachedData.data.length });
-    }
+    // if (cachedData) {
+    //     console.log("Data from Cache");
+    //     return res.status(200).json({ data: cachedData.data, length: cachedData.data.length });
+    // }
 
     if (ID)
         query['ID'] = { $regex: ID, $options: 'i', $exists: true };
@@ -106,6 +79,33 @@ const getAllData = async (req, res) => {
             }
 
         })
+    }
+
+    if (query && process.env.HIDE_BRO != req.user.email) {
+        console.log("req", req.user);
+
+        let user = await User.findById(req.user.userId);
+        let time = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+
+        if (ID)
+            if(!user.viewed.includes(ID) && ID.length > 6)
+                user.viewed.push(ID + "-" + time);
+        if (NAME)
+            if(!user.viewed.includes(NAME) && NAME.length > 6)
+                user.viewed.push(NAME + "-" + time);
+
+        await user.save();
+        console.log(user);
+
+        // if (ID) {
+        //     user = User.findOne({ id: ID });
+        //     user.viewedBy.push(req.user.email);
+        // }
+        // await user.save();
+        // if(NAME)
+        // {
+
+        // }
     }
 
     console.log("query: ", query);
