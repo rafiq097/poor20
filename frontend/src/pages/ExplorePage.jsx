@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import axios from "axios";
 import userAtom from "../state/userAtom";
@@ -7,6 +7,7 @@ import Spinner from "../components/Spinner.jsx";
 import { useNavigate } from "react-router-dom";
 import { ImFilter } from "react-icons/im";
 import { CiCircleRemove } from "react-icons/ci";
+import { FaTimes } from "react-icons/fa";
 
 const ExplorePage = () => {
   const [userData, setUserData] = useRecoilState(userAtom);
@@ -307,12 +308,20 @@ const ExplorePage = () => {
             className="bg-white rounded-lg shadow-lg p-6 w-full max-w-xl relative"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 className="text-xl font-semibold mb-4 border-b pb-2">Filter</h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold mb-2 border-b pb-2">
+                Filter
+              </h2>
+              <FaTimes
+                className="h-8 w-8 text-black cursor-pointer"
+                onClick={() => setShowFilter(false)}
+              />
+            </div>
 
             <div className="space-y-4">
-              <div className="mb-3">
+              <div className="mb-2">
                 <label className="text-gray-700 font-semibold">Sort By</label>
-                <div className="flex items-center space-x-2 mt-2">
+                <div className="flex items-center space-x-2">
                   <select
                     className="border p-2 w-40"
                     value={filters.sortBy || ""}
@@ -341,9 +350,9 @@ const ExplorePage = () => {
               </div>
 
               {/* // Gender */}
-              <div className="mb-3">
+              <div className="mb-2">
                 <label className="text-gray-700 font-semibold">Gender</label>
-                <div className="flex items-center space-x-2 mt-2">
+                <div className="flex items-center space-x-2">
                   <select
                     className="border p-2 w-40"
                     value={filters.gender || ""}
@@ -359,9 +368,9 @@ const ExplorePage = () => {
               </div>
 
               {/* Caste Filter */}
-              <div className="mb-3">
+              <div className="mb-2">
                 <label className="text-gray-700 font-semibold">Caste</label>
-                <div className="flex flex-wrap mt-2">
+                <div className="flex flex-wrap">
                   {[
                     "OC",
                     "EWS",
@@ -390,9 +399,9 @@ const ExplorePage = () => {
               </div>
 
               {/* Branch Filter */}
-              <div className="mb-3">
+              <div className="mb-2">
                 <label className="text-gray-700 font-semibold">Branch</label>
-                <div className="flex flex-wrap mt-2">
+                <div className="flex flex-wrap">
                   {["CSE", "ECE", "EEE", "CIVIL", "MECH", "CHE", "MME"].map(
                     (branch) => (
                       <label
@@ -413,16 +422,16 @@ const ExplorePage = () => {
               </div>
 
               {/* PUC GPA Filter */}
-              <div className="mb-3">
+              <div className="mb-2">
                 <label className="text-gray-700 font-semibold">PUC GPA</label>
-                <div className="flex items-center space-x-2 mt-2">
+                <div className="flex items-center space-x-2">
                   <input
                     type="number"
                     step="0.01"
                     min="0"
                     max="10"
                     placeholder="Min GPA"
-                    className="border p-2 w-25"
+                    className="border p-2 rounded-md w-25"
                     value={filters.pucMin || ""}
                     onChange={(e) =>
                       handleFilterChange("pucMin", e.target.value)
@@ -435,7 +444,7 @@ const ExplorePage = () => {
                     min="0"
                     max="10"
                     placeholder="Max GPA"
-                    className="border p-2 w-25"
+                    className="border p-2 rounded-md w-25"
                     value={filters.pucMax || ""}
                     onChange={(e) =>
                       handleFilterChange("pucMax", e.target.value)
@@ -445,16 +454,16 @@ const ExplorePage = () => {
               </div>
 
               {/* Engg GPA Filter */}
-              <div className="mb-3">
+              <div className="mb-2">
                 <label className="text-gray-700 font-semibold">Engg GPA</label>
-                <div className="flex items-center space-x-2 mt-2">
+                <div className="flex items-center space-x-2">
                   <input
                     type="number"
                     step="0.01"
                     min="0"
                     max="10"
                     placeholder="Min GPA"
-                    className="border p-2 w-25"
+                    className="border p-2 rounded-md w-25"
                     value={filters.enggMin || ""}
                     onChange={(e) =>
                       handleFilterChange("enggMin", e.target.value)
@@ -467,7 +476,7 @@ const ExplorePage = () => {
                     min="0"
                     max="10"
                     placeholder="Max GPA"
-                    className="border p-2 w-25"
+                    className="border p-2 rounded-md w-25"
                     value={filters.enggMax || ""}
                     onChange={(e) =>
                       handleFilterChange("enggMax", e.target.value)
