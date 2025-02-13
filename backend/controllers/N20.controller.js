@@ -13,8 +13,8 @@ const getAllData = async (req, res) => {
     console.log(req.query);
     console.log(ID, NAME, SCHOOL);
 
-
     let query = {};
+
     if (ID)
         query['ID'] = { $regex: ID, $options: 'i', $exists: true };
     if (NAME)
