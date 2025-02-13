@@ -157,7 +157,7 @@ const getAllData = async (req, res) => {
         ...user._doc
     }));
 
-    await Cache.create({ key: queryKey, data });
+    // await Cache.create({ key: queryKey, data });
     res.status(200).json({ data, length: data.length });
 };
 
