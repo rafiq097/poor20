@@ -141,7 +141,7 @@ const getAllData = async (req, res) => {
 
     let data = await result.exec();
     data = data.map((user, index) => ({
-        '#': index + 1,
+        'num': index + 1,
         ...user._doc
     }));
 
