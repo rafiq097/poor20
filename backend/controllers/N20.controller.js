@@ -26,7 +26,7 @@ const getAllData = async (req, res) => {
     if (GENDER)
         query['GENDER'] = { $regex: GENDER, $options: 'i', $exists: true };
     if (CASTE)
-        query['CASTE'] = { $regex: CASTE, $options: 'i', $exists: true };
+        query['CASTE'] = { $in: CASTE.split(',') };
     if (SCHOOL)
         query['SCHOOL'] = { $regex: SCHOOL, $options: 'i', $exists: true };
     if (MANDAL)
@@ -42,7 +42,7 @@ const getAllData = async (req, res) => {
     if (ROOM)
         query['ROOM'] = { $regex: ROOM, $options: 'i', $exists: true };
     if (BRANCH)
-        query['BRANCH'] = { $regex: BRANCH, $options: 'i', $exists: true };
+        query['BRANCH'] = { $in: BRANCH.split(',') };
 
 
     //NUMERIC GILTERS
