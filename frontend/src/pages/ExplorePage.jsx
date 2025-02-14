@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import axios from "axios";
@@ -44,10 +45,11 @@ const ExplorePage = () => {
         setUserData(res.data.user);
       } catch (err) {
         console.log(err.message);
-        localStorage.removeItem("token");
-        setUserData(null);
-        toast.error("Session expired. Please login again.");
-        navigate("/login");
+        // localStorage.removeItem("token");
+        // setUserData(null);
+        // toast.error("Session expired. Please login again.");
+        // navigate("/login");
+        toast.error("Please try again.");
       } finally {
         setTimeout(() => {
           setLoading(false);
@@ -118,7 +120,12 @@ const ExplorePage = () => {
 
         const value = filters[key];
         if (Array.isArray(value) && value.length > 0) {
-          url.append(key.toUpperCase(), value.join(","));
+          if (batch == "r20" || batch == "R20")
+            url.append(key.toUpperCase(), value.join(","));
+          else {
+            let vals = value.map((v) => v.replace("-", ""));
+            url.append(key.toUpperCase(), vals.join(","));
+          }
         } else if (
           (key == "pucMin" ||
             key == "pucMax" ||
@@ -154,7 +161,7 @@ const ExplorePage = () => {
       const res = await axios.get(`/${batch}/?${url}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log(res);
+      // console.log(res);
       setUsers(res.data.data);
     } catch (err) {
       console.log(err.message);
@@ -197,6 +204,10 @@ const ExplorePage = () => {
           <Spinner className="h-8 w-8 animate-spin mb-4" />{" "}
         </div>
       )}
+
+      <h3 className="flex items-center justify-center mb-2">
+        Found {users.length} results
+      </h3>
 
       <div className="flex flex-col sm:flex-row justify-center items-center mb-6 space-y-4 sm:space-y-0 sm:space-x-4">
         <div className="relative w-full sm:w-64">
@@ -332,8 +343,10 @@ const ExplorePage = () => {
                     <option value="">Select Field</option>
                     <option value="ID">ID</option>
                     <option value="NAME">Name</option>
-                    <option value="PUC_GPA">PUC_GPA</option>
-                    <option value="ENGG_AVG">ENGG_AVG</option>
+                    {batch == "r20" && <option value="PUC_GPA">PUC_GPA</option>}
+                    {batch == "r20" && (
+                      <option value="ENGG_AVG">ENGG_AVG</option>
+                    )}
                   </select>
                   <select
                     className="border p-2 w-40"
@@ -422,68 +435,74 @@ const ExplorePage = () => {
               </div>
 
               {/* PUC GPA Filter */}
-              <div className="mb-2">
-                <label className="text-gray-700 font-semibold">PUC GPA</label>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    max="10"
-                    placeholder="Min GPA"
-                    className="border p-2 rounded-md w-25"
-                    value={filters.pucMin || ""}
-                    onChange={(e) =>
-                      handleFilterChange("pucMin", e.target.value)
-                    }
-                  />
-                  <span>-</span>
-                  <input
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    max="10"
-                    placeholder="Max GPA"
-                    className="border p-2 rounded-md w-25"
-                    value={filters.pucMax || ""}
-                    onChange={(e) =>
-                      handleFilterChange("pucMax", e.target.value)
-                    }
-                  />
+              {batch == "r20" && (
+                <div className="mb-2">
+                  <label className="text-gray-700 font-semibold">PUC GPA</label>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      max="10"
+                      placeholder="Min GPA"
+                      className="border p-2 rounded-md w-25"
+                      value={filters.pucMin || ""}
+                      onChange={(e) =>
+                        handleFilterChange("pucMin", e.target.value)
+                      }
+                    />
+                    <span>-</span>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      max="10"
+                      placeholder="Max GPA"
+                      className="border p-2 rounded-md w-25"
+                      value={filters.pucMax || ""}
+                      onChange={(e) =>
+                        handleFilterChange("pucMax", e.target.value)
+                      }
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Engg GPA Filter */}
-              <div className="mb-2">
-                <label className="text-gray-700 font-semibold">Engg GPA</label>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    max="10"
-                    placeholder="Min GPA"
-                    className="border p-2 rounded-md w-25"
-                    value={filters.enggMin || ""}
-                    onChange={(e) =>
-                      handleFilterChange("enggMin", e.target.value)
-                    }
-                  />
-                  <span>-</span>
-                  <input
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    max="10"
-                    placeholder="Max GPA"
-                    className="border p-2 rounded-md w-25"
-                    value={filters.enggMax || ""}
-                    onChange={(e) =>
-                      handleFilterChange("enggMax", e.target.value)
-                    }
-                  />
+              {batch == "r20" && (
+                <div className="mb-2">
+                  <label className="text-gray-700 font-semibold">
+                    Engg GPA
+                  </label>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      max="10"
+                      placeholder="Min GPA"
+                      className="border p-2 rounded-md w-25"
+                      value={filters.enggMin || ""}
+                      onChange={(e) =>
+                        handleFilterChange("enggMin", e.target.value)
+                      }
+                    />
+                    <span>-</span>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      max="10"
+                      placeholder="Max GPA"
+                      className="border p-2 rounded-md w-25"
+                      value={filters.enggMax || ""}
+                      onChange={(e) =>
+                        handleFilterChange("enggMax", e.target.value)
+                      }
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
 
               <button
                 className="bg-blue-500 text-white p-2 rounded w-full"
