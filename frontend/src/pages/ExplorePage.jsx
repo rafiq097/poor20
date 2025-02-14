@@ -504,15 +504,35 @@ const ExplorePage = () => {
                 </div>
               )}
 
-              <button
-                className="bg-blue-500 text-white p-2 rounded w-full"
-                onClick={() => {
-                  setShowFilter(false);
-                  applyFilters();
-                }}
-              >
-                Apply Filters
-              </button>
+              <div className="flex items-center space-x-2">
+                <button
+                  className="bg-gray-100 text-black p-2 border border-gray-300 rounded w-1/2"
+                  onClick={() => {
+                    setFilters({
+                      sortBy: "",
+                      sortOrder: "",
+                      gender: "",
+                      caste: [],
+                      branch: [],
+                      pucMin: "",
+                      pucMax: "",
+                      enggMin: "",
+                      enggMax: "",
+                    });
+                  }}
+                >
+                  Clear Filters
+                </button>
+                <button
+                  className="bg-blue-500 text-white p-2 rounded w-1/2"
+                  onClick={() => {
+                    setShowFilter(false);
+                    applyFilters();
+                  }}
+                >
+                  Apply Filters
+                </button>
+              </div>
             </div>
           </div>
         </div>

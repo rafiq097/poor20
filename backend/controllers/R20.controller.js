@@ -75,7 +75,7 @@ const getAllData = async (req, res) => {
             }
 
             else if (options.includes(field)) {
-                query[field] = { [operator]: Number(value), $exists: true };
+                query[field] = {...(query[field] || {}), [operator]: Number(value), $exists: true, $ne: null };
             }
 
         })
