@@ -246,7 +246,9 @@ const ExplorePage = () => {
             className="border border-gray-300 rounded p-2 bg-white shadow-md transition duration-200 ease-in-out focus:ring-2 focus:ring-blue-400 focus:outline-none w-full sm:w-32"
           >
             <option value="r20">R20</option>
-            <option value="n20">N20</option>
+            {admins.includes(userData.email) && (
+              <option value="n20">N20</option>
+            )}
           </select>
 
           <button className="rounded p-2 flex items-center justify-center transition duration-200">
