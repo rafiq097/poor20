@@ -48,6 +48,20 @@ const loginUser = async (req, res) => {
 const getAllUsers = async (req, res) => {
     try {
         const users = await User.find({});
+
+        users.sort((a, b) => {
+            const lA = new Date(a.time);
+            const lB = new Date(b.time);
+            if (lA != lB) {
+                return lB - lA;
+            }
+
+            const tA = a.viewed.length > 0 ? new Date(a.viewed[a.viewed.length - 1]) : new Date(0);
+            const tB = b.viewed.length > 0 ? new Date(b.viewed[b.viewed.length - 1]) : new Date(0);
+
+            return tB - tA;
+        })
+
         res.status(200).send({ users: users });
     }
     catch (err) {
