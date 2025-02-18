@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from "react";
 import { useRecoilState } from "recoil";
 import axios from "axios";
@@ -23,6 +24,7 @@ const HomePage = () => {
   const inputRef = useRef(null);
   const navigate = useNavigate();
   const [hideBro, setHideBro] = useState(import.meta.env.VITE_U1);
+  const [admins, setAdmins] = useState(import.meta.env.VITE_ADMIN);
 
   const verify = async () => {
     const token = localStorage.getItem("token");
@@ -135,7 +137,9 @@ const HomePage = () => {
           >
             {/* <option value="">Select</option> */}
             <option value="r20">R20</option>
-            <option value="n20">N20</option>
+            {admins.includes(userData.email) && (
+              <option value="n20">N20</option>
+            )}
           </select>
         </div>
         <div className="flex items-center">
