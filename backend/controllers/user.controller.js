@@ -46,6 +46,9 @@ const loginUser = async (req, res) => {
 };
 
 const convert = (str) => {
+    if(!str)
+        return new Date(0);
+    
     const date = new Date(str);
     return date.toLocaleString("en-US", {
         hour: "numeric",
@@ -59,7 +62,7 @@ const convert = (str) => {
 };
 
 const extract = (arr) => {
-    if (arr.length)
+    if (arr.length == 0)
         return new Date(0);
 
     const last = arr[arr.length - 1];
