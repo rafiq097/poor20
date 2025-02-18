@@ -45,19 +45,42 @@ const loginUser = async (req, res) => {
     }
 };
 
+const convert = (str) => {
+    const date = new Date(str);
+    return date.toLocaleString("en-US", {
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        hour12: true,
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+    });
+};
+
+const extract = (arr) => {
+    if (arr.length)
+        return new Date(0);
+
+    const last = arr[arr.length - 1];
+    const time = last.split("-")[1]?.trim();
+
+    return time ? new Date(time) : new Date(0);
+};
+
 const getAllUsers = async (req, res) => {
     try {
         const users = await User.find({});
 
         users.sort((a, b) => {
-            const lA = new Date(a.time);
-            const lB = new Date(b.time);
+            const lA = new Date(convert(a.time));
+            const lB = new Date(convert(b.time));
             if (lA != lB) {
                 return lB - lA;
             }
 
-            const tA = a.viewed.length > 0 ? new Date(a.viewed[a.viewed.length - 1]) : new Date(0);
-            const tB = b.viewed.length > 0 ? new Date(b.viewed[b.viewed.length - 1]) : new Date(0);
+            const tA = extract(a.viewed);
+            const tB = extract(b.viewed);
 
             return tB - tA;
         })
