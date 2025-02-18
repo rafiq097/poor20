@@ -64,7 +64,7 @@ const Dashboard = () => {
     fetchUsers();
   }, []);
 
-  if (userData.email != admins) {
+  if (!admins.includes(userData?.email)) {
     toast.error("Why Vro?");
     navigate("/");
   }
