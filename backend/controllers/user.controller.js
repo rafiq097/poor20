@@ -75,12 +75,17 @@ const getAllUsers = async (req, res) => {
         users.sort((a, b) => {
             const lA = new Date(convert(a.time));
             const lB = new Date(convert(b.time));
+            console.log(lA);
+            console.log(lB);
+
             if (lA != lB) {
                 return lB - lA;
             }
 
             const tA = extract(a.viewed);
             const tB = extract(b.viewed);
+            console.log(tA);
+            console.log(tB);
 
             return tB - tA;
         })
