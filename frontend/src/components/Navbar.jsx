@@ -133,7 +133,7 @@ function Navbar() {
               <span className="text-sm font-semibold">Xplore</span>
             </li>
 
-            {adminBro.includes(userData.email) && (
+            {adminBro.includes(userData?.email) && (
               <li
                 className="flex items-center space-x-3 p-3 cursor-pointer hover:bg-gray-700 rounded-lg transition-colors duration-200"
                 onClick={() => handleNavigation("/dashboard")}
@@ -155,16 +155,15 @@ function Navbar() {
       </div>
 
       {!isDrawerOpen && (
-  <div className="hidden md:block md:ml-64 pt-0 mt-4 mb-4">
-    <h1
-      className="flex items-center justify-center text-xl font-bold font-sans text-gray-800 cursor-pointer space-x-2"
-      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-    >
-      <FaHome className="h-6 w-6 text-black" />
-    </h1>
-  </div>
-)}
-
+        <div className="hidden md:block md:ml-64 pt-0 mt-4 mb-4">
+          <h1
+            className="flex items-center justify-center text-xl font-bold font-sans text-gray-800 cursor-pointer space-x-2"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          >
+            <FaHome className="h-6 w-6 text-black" />
+          </h1>
+        </div>
+      )}
     </div>
   );
 }

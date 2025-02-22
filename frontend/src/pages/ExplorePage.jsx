@@ -246,7 +246,7 @@ const ExplorePage = () => {
             className="border border-gray-300 rounded p-2 bg-white shadow-md transition duration-200 ease-in-out focus:ring-2 focus:ring-blue-400 focus:outline-none w-full sm:w-32"
           >
             <option value="r20">R20</option>
-            {admins.includes(userData.email) && (
+            {admins.includes(userData?.email) && (
               <option value="n20">N20</option>
             )}
           </select>
@@ -259,7 +259,7 @@ const ExplorePage = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 justify-items-center">
         {users?.map((user, index) =>
-          !hideBro.includes(user.ID) || admins.includes(userData.email) ? (
+          !hideBro.includes(user.ID) || admins.includes(userData?.email) ? (
             <div
               key={index}
               className="bg-white p-4 rounded-lg shadow-lg w-64 h-auto flex flex-col justify-between"
@@ -305,6 +305,11 @@ const ExplorePage = () => {
                   PUC: {user.PUC_GPA || "N/A"}
                 </p>
                 <p className="text-gray-600">ENGG: {user.ENGG_AVG || "N/A"}</p>
+
+                {/* //delete this bro */}
+                {admins.includes(userData?.email) && (
+                  <p className="text-gray-600">SSC: {user.SSC_NO || "N/A"}</p>
+                )}
               </div>
             </div>
           ) : null

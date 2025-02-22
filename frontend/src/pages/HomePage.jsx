@@ -229,7 +229,7 @@ const HomePage = () => {
                       // key === "E1S2" ||
                       // key === "E2S1" ||
                       // key === "E2S2" ||
-                      key === "SSC_NO" ||
+                      // key === "SSC_NO" ||
                       key === "SSC_BOARD" ||
                       key === "PHONE2" ||
                       !value
