@@ -312,11 +312,18 @@ const ExplorePage = () => {
                 <p className="text-gray-600 mb-1">
                   PUC: {user.PUC_GPA || "N/A"}
                 </p>
-                <p className="text-gray-600">ENGG: {user.ENGG_AVG || "N/A"}</p>
-                <button className="bg-yellow-300" onClick={() => {
-                  setShowCard(true)
-                  setCardID(user.ID)
-                }} >View</button>
+                <p className="text-gray-600 mb-2">
+                  ENGG: {user.ENGG_AVG || "N/A"}
+                </p>
+                <button
+                  className="bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition duration-300 ease-in-out"
+                  onClick={() => {
+                    setShowCard(true);
+                    setCardID(user.ID);
+                  }}
+                >
+                  View
+                </button>
               </div>
             </div>
           ) : null
@@ -324,7 +331,7 @@ const ExplorePage = () => {
       </div>
 
       {showCard && (
-        <Card id={cardID} handleCloseCard={handleCloseCard}/>
+        <Card id={cardID} batch={batch} handleCloseCard={handleCloseCard} />
       )}
 
       {/* Filter Modal */}
