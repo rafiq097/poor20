@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { ImFilter } from "react-icons/im";
 import { CiCircleRemove } from "react-icons/ci";
 import { FaTimes } from "react-icons/fa";
+import Card from "../components/Card.jsx";
 
 const ExplorePage = () => {
   const [userData, setUserData] = useRecoilState(userAtom);
@@ -32,6 +33,8 @@ const ExplorePage = () => {
   });
   const [hideBro, setHideBro] = useState(import.meta.env.VITE_U1);
   const [admins, setAdmins] = useState(import.meta.env.VITE_ADMIN);
+  const [showCard, setShowCard] = useState(false);
+  const [cardID, setCardID] = useState("");
   const navigate = useNavigate();
 
   const verify = async () => {
@@ -197,6 +200,11 @@ const ExplorePage = () => {
     fetchFilteredData();
   };
 
+  const handleCloseCard = () => {
+    setCardID("");
+    setShowCard(false);
+  };
+
   return (
     <div className="min-h-screen p-4 relative">
       {loading && (
@@ -305,16 +313,19 @@ const ExplorePage = () => {
                   PUC: {user.PUC_GPA || "N/A"}
                 </p>
                 <p className="text-gray-600">ENGG: {user.ENGG_AVG || "N/A"}</p>
-
-                {/* //delete this bro */}
-                {admins.includes(userData?.email) && (
-                  <p className="text-gray-600">SSC: {user.SSC_NO || "N/A"}</p>
-                )}
+                <button className="bg-yellow-300" onClick={() => {
+                  setShowCard(true)
+                  setCardID(user.ID)
+                }} >View</button>
               </div>
             </div>
           ) : null
         )}
       </div>
+
+      {showCard && (
+        <Card id={cardID} handleCloseCard={handleCloseCard}/>
+      )}
 
       {/* Filter Modal */}
       {showFilter && (

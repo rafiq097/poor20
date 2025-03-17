@@ -10,7 +10,25 @@ poor.csv
 #updated till e3s1
 data_e3.csv 
 
+original.json
+original.csv
 jupyter.ipynb
 
 combine_N20.js
 combine_R20.js
+
+cleaned_data.json
+data_e3 (copy).csv
+data_e3.csv
+data_e3.json
+merged_data_assured.csv
+merged_data_assured_updated.csv
+merged_data.csv
+merged_data.json
+poor (copy).csv
+
+the_data_approved (++).csv
+the_data_approved.csv
+the_data_approved.json
+the_data_old.csv
+who_knows.json

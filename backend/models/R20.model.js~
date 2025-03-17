@@ -69,9 +69,11 @@ const dataSchema = new mongoose.Schema({
         type: String,
         // required: [true, "Enter P2"]
     },
-    STREAM: {
-        type: String,
-    },
+    // STREAM: {
+       // type: String,
+       // default: null,
+        // required: [true, "Enter Stream"]
+    // },
     BRANCH: {
         type: String,
         // required: [true, "Enter Branch"]
@@ -81,22 +83,6 @@ const dataSchema = new mongoose.Schema({
         // required: [true, "Enter S1"]
     },
     E1S2: {
-        type: Number,
-        // required: [true, "Enter S2"]
-    },
-    E2S1: {
-        type: Number,
-        // required: [true, "Enter S1"]
-    },
-    E2S2: {
-        type: Number,
-        // required: [true, "Enter S2"]
-    },
-    E3S1: {
-        type: Number,
-        // required: [true, "Enter S1"]
-    },
-    E3S2: {
         type: Number,
         // required: [true, "Enter S2"]
     },
@@ -116,14 +102,6 @@ const dataSchema = new mongoose.Schema({
         type: String,
         // required: [true, "Enter Father's Name"]
     },
-    MOTHER: {
-        type: String,
-        // required: [true, "Enter Father's Name"]
-    },
-    BLOOD_GROUP: {
-        type: String,
-        // required: [true, "Enter Father's Name"]
-    },
     ROOM: {
         type: String,
         // required: [true, "Enter Room"]
@@ -132,19 +110,8 @@ const dataSchema = new mongoose.Schema({
         type: String,
         // required: [true, "Enter Phone"]
     },
-    PHONE2: {
-        type: String,
-        // required: [true, "Enter Phone"]
-    },
-    PPHONE: {
-        type: String,
-        // required: [true, "Enter Phone"]
-    },
-    ADDRESS: {
-        type: String,
-        // required: [true, "Enter Phone"]
-    },
-}, { timestamps: true });
+}, { strict: false }
+, { timestamps: true });
 
 const R20 = mongoose.model("R20", dataSchema, "R20");
 
