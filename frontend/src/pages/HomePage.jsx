@@ -190,10 +190,8 @@ const HomePage = () => {
 
       {console.log(showData, data)}
       {showData &&
-        (hideBro.includes(data.ID) ? (
-          <p className="text-2xl font-bold mb-4 text-center">
-            Why &#x1F614;
-          </p>
+        (hideBro.includes(data.ID) && !admins.includes(userData?.email) ? (
+          <p className="text-2xl font-bold mb-4 text-center">Why &#x1F614;</p>
         ) : (
           <div className="container mx-auto p-4 flex justify-center">
             <div className="overflow-x-auto max-w-lg">
