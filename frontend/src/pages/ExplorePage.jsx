@@ -440,7 +440,7 @@ const ExplorePage = () => {
               <div className="mb-2">
                 <label className="text-gray-700 font-semibold">Branch</label>
                 <div className="flex flex-wrap">
-                  {["CSE", "ECE", "EEE", "CIVIL", "MECH", "CHE", "MME"].map(
+                  {["CSE", "ECE", "EEE", "CIVIL", "ME", "CHEM", "MME"].map(
                     (branch) => (
                       <label
                         key={branch}

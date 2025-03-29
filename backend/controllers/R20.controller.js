@@ -31,7 +31,7 @@ const getAllData = async (req, res) => {
     if (DOB)
         query['DOB'] = { $regex: DOB, $options: 'i', $exists: true };
     if (GENDER)
-        query['GENDER'] = { $regex: GENDER, $options: 'i', $exists: true };
+        query['GENDER'] = { $regex: `^${GENDER}$`, $options: 'i' };    
     if (CASTE)
         query['CASTE'] = { $in: CASTE.split(',') };
     if (SCHOOL)
