@@ -192,7 +192,7 @@ const HomePage = () => {
       {showData &&
         (hideBro.includes(data.ID) ? (
           <p className="text-2xl font-bold mb-4 text-center">
-            Why vro &#x1F614;
+            Why &#x1F614;
           </p>
         ) : (
           <div className="container mx-auto p-4 flex justify-center">
