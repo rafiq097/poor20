@@ -1,10 +1,10 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model.js");
 
-const toIST = (date) => {
-    const IST = 5.5 * 60 * 60 * 1000;
-    return new Date(date.getTime());
-};
+// const toIST = (date) => {
+//     const IST = 5.5 * 60 * 60 * 1000;
+//     return new Date(date.getTime());
+// };
 
 const loginUser = async (req, res) => {
     console.log("login called");
@@ -38,9 +38,8 @@ const loginUser = async (req, res) => {
             }
         });
     }
-
     catch (err) {
-        console.log(err.message);
+        console.log("login error:", err.message);
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
