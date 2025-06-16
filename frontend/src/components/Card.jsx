@@ -94,7 +94,7 @@ const Card = ({ id, batch, handleCloseCard }) => {
             </table>
           </div>
         ) : (
-          <p className="text-red-500 mt-4">No data available for this card.</p>
+          <p className="text-red-500 mt-4">No data. Please try again...</p>
         )}
       </div>
     </div>
