@@ -40,7 +40,7 @@ const HomePage = () => {
     setTimeout(() => {
       setIsAtStart(el.scrollLeft <= 5);
       setIsAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 5);
-    }, 300);
+    }, 100);
   };
 
   const verify = async () => {
