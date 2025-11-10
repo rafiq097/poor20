@@ -278,7 +278,7 @@ const ExplorePage = () => {
                 )}
                 {batch == "r20" && (
                   <img
-                    src={`https://raw.githubusercontent.com/pythonista69/r20/main/images/${user.ID}.jpg`}
+                    src={`https://raw.githubusercontent.com/pythonista69/r20/main/images/${user.ID}/0.jpg`}
                     alt={user.NAME}
                     className="w-full h-full object-contain max-h-60"
                   />
