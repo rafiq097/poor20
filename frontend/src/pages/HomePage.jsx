@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import Spinner from "../components/Spinner.jsx";
 import { useNavigate } from "react-router-dom";
 import { CiCircleRemove } from "react-icons/ci";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const HomePage = () => {
   const [userData, setUserData] = useRecoilState(userAtom);
@@ -15,6 +16,7 @@ const HomePage = () => {
   const [searchBy, setSearchBy] = useState("ID");
   const [inputValue, setInputValue] = useState("");
   const [users, setUsers] = useState([]);
+  const [allUsers, setAllUsers] = useState({ r20: [], n20: [] });
   const [ids, setIds] = useState([]);
   const [names, setNames] = useState([]);
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -25,6 +27,22 @@ const HomePage = () => {
   const navigate = useNavigate();
   const [hideBro, setHideBro] = useState(import.meta.env.VITE_U1);
   const [admins, setAdmins] = useState(import.meta.env.VITE_ADMIN);
+
+  const scrollRef = useRef(null);
+  const [isAtStart, setIsAtStart] = useState(true);
+  const [isAtEnd, setIsAtEnd] = useState(false);
+
+  const scrollBy = (direction) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const amount = el.clientWidth;
+    el.scrollBy({ left: direction * amount, behavior: "smooth" });
+
+    setTimeout(() => {
+      setIsAtStart(el.scrollLeft <= 5);
+      setIsAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 5);
+    }, 300);
+  };
 
   const verify = async () => {
     const token = localStorage.getItem("token");
@@ -51,38 +69,59 @@ const HomePage = () => {
     }
   };
 
-  const fetchUsers = async () => {
+  const fetchAllUsers = async () => {
     try {
+      setLoading(true);
       const token = localStorage.getItem("token");
-      // if (batch === "") return;
-      const res = await axios.get(`/${batch}/`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setUsers(res.data.data);
-    } catch (err) {
-      console.log(err.message);
-    }
-  };
+      const headers = { Authorization: `Bearer ${token}` };
 
-  const fetchSearchUserData = async (value) => {
-    try {
-      // inputRef.current.blur();
-      const token = localStorage.getItem("token");
-      const res = await axios.get(`/${batch}/?${searchBy}=${value}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setData(res.data.data[0]);
-      setShowData(true);
-      setDropdownVisible(false);
+      const [r20Res, n20Res] = await Promise.all([
+        axios.get(`/r20/`, { headers }),
+        admins.includes(userData?.email)
+          ? axios.get(`/n20/`, { headers })
+          : Promise.resolve({ data: { data: [] } }),
+      ]);
+
+      const combined = {
+        r20: r20Res.data.data || [],
+        n20: n20Res.data.data || [],
+      };
+
+      setAllUsers(combined);
+      setUsers(combined[batch]);
+      localStorage.setItem("allUsersCache", JSON.stringify(combined));
     } catch (err) {
-      console.log(err.message);
+      console.log("Error fetching users:", err.message);
+      setLoading(false);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     verify();
-    fetchUsers();
-  }, [batch, searchBy]);
+
+    const cached = localStorage.getItem("allUsersCache");
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        setAllUsers(parsed);
+        setUsers(parsed[batch]);
+        setLoading(false);
+      } catch (err) {
+        console.error("Cache parse failed:", err);
+        fetchAllUsers();
+      }
+    } else {
+      fetchAllUsers();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (allUsers[batch]?.length) {
+      setUsers(allUsers[batch]);
+    }
+  }, [batch, allUsers]);
 
   useEffect(() => {
     if (users.length) {
@@ -96,20 +135,32 @@ const HomePage = () => {
 
   useEffect(() => {
     if (inputValue) {
-      let filtered;
-      if (searchBy === "ID")
-        filtered = ids.filter((id) => id.includes(inputValue));
-      else
-        filtered = names.filter((name) =>
-          name.toLowerCase().includes(inputValue.toLowerCase())
-        );
-
-      setFiltered(filtered);
-      setDropdownVisible(filtered.length > 0);
+      let filteredList =
+        searchBy === "ID"
+          ? ids.filter((id) => id.includes(inputValue))
+          : names.filter((name) =>
+            name.toLowerCase().includes(inputValue.toLowerCase())
+          );
+      setFiltered(filteredList);
+      setDropdownVisible(filteredList.length > 0);
     } else {
       setDropdownVisible(false);
     }
-  }, [inputValue, ids, names]);
+  }, [inputValue, ids, names, searchBy]);
+
+  const fetchSearchUserData = async (value) => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get(`/${batch}/?${searchBy}=${value}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setData(res.data.data[0]);
+      setShowData(true);
+      setDropdownVisible(false);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
 
   const handleSelectValue = (value) => {
     setInputValue(value);
@@ -137,7 +188,7 @@ const HomePage = () => {
           >
             {/* <option value="">Select</option> */}
             <option value="r20">R20</option>
-            {admins.includes(userData.email) && (
+            {admins?.includes(userData?.email) && (
               <option value="n20">N20</option>
             )}
           </select>
@@ -188,7 +239,7 @@ const HomePage = () => {
         )}
       </div>
 
-      {console.log(showData, data)}
+      {/* {console.log(showData, data)} */}
       {showData &&
         (hideBro.includes(data.ID) && !admins.includes(userData?.email) ? (
           <p className="text-2xl font-bold mb-4 text-center">Why &#x1F614;</p>
@@ -197,12 +248,43 @@ const HomePage = () => {
             <div className="overflow-x-auto max-w-lg">
               <h2 className="text-2xl font-bold mb-4 text-center">{data.ID}</h2>
 
-              <div className="w-full h-60 bg-gray-100 mb-4 flex items-center justify-center overflow-hidden rounded-lg">
-                <img
-                  src={`https://raw.githubusercontent.com/pythonista69/r20/main/images/${data.ID}.jpg`}
-                  alt={data.ID}
-                  className="w-full h-full object-contain max-h-60"
-                />
+              <div className="relative w-full mb-4">
+                <div
+                  ref={scrollRef}
+                  className="flex gap-4 overflow-hidden rounded-lg bg-gray-100 p-2"
+                >
+                  {[0, 1].map((num) => (
+                    <div
+                      key={num}
+                      className="flex-shrink-0 w-full h-60 flex items-center justify-center overflow-hidden rounded-lg"
+                    >
+                      <img
+                        src={`https://raw.githubusercontent.com/pythonista69/r20/main/images/${data.ID}/${num}.jpg`}
+                        alt={`${data.ID}-${num}`}
+                        className="w-full h-full object-contain max-h-60"
+                        loading="lazy"
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                <button
+                  onClick={() => scrollBy(-1)}
+                  disabled={isAtStart}
+                  className={`absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md backdrop-blur-sm transition-opacity ${isAtStart ? "opacity-30 cursor-not-allowed" : "hover:bg-white"
+                    }`}
+                >
+                  <ChevronLeft className="w-5 h-5 text-gray-800" />
+                </button>
+
+                <button
+                  onClick={() => scrollBy(1)}
+                  disabled={isAtEnd}
+                  className={`absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md backdrop-blur-sm transition-opacity ${isAtEnd ? "opacity-30 cursor-not-allowed" : "hover:bg-white"
+                    }`}
+                >
+                  <ChevronRight className="w-5 h-5 text-gray-800" />
+                </button>
               </div>
 
               <table className="min-w-full bg-white border rounded-lg">
@@ -229,7 +311,7 @@ const HomePage = () => {
                       // key === "E2S2" ||
                       // key === "SSC_NO" ||
                       key === "SSC_BOARD" ||
-                      key === "PHONE2" ||
+                      // key === "PHONE2" ||
                       !value
                     )
                       return null;
