@@ -16,7 +16,6 @@ const HomePage = () => {
   const [searchBy, setSearchBy] = useState("ID");
   const [inputValue, setInputValue] = useState("");
   const [users, setUsers] = useState([]);
-  const [allUsers, setAllUsers] = useState({ r20: [], n20: [] });
   const [ids, setIds] = useState([]);
   const [names, setNames] = useState([]);
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -69,59 +68,38 @@ const HomePage = () => {
     }
   };
 
-  const fetchAllUsers = async () => {
+  const fetchUsers = async () => {
     try {
-      setLoading(true);
       const token = localStorage.getItem("token");
-      const headers = { Authorization: `Bearer ${token}` };
-
-      const [r20Res, n20Res] = await Promise.all([
-        axios.get(`/r20/`, { headers }),
-        admins.includes(userData?.email)
-          ? axios.get(`/n20/`, { headers })
-          : Promise.resolve({ data: { data: [] } }),
-      ]);
-
-      const combined = {
-        r20: r20Res.data.data || [],
-        n20: n20Res.data.data || [],
-      };
-
-      setAllUsers(combined);
-      setUsers(combined[batch]);
-      localStorage.setItem("allUsersCache", JSON.stringify(combined));
+      // if (batch === "") return;
+      const res = await axios.get(`/${batch}/`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUsers(res.data.data);
     } catch (err) {
-      console.log("Error fetching users:", err.message);
-      setLoading(false);
-    } finally {
-      setLoading(false);
+      console.log(err.message);
+    }
+  };
+
+  const fetchSearchUserData = async (value) => {
+    try {
+      // inputRef.current.blur();
+      const token = localStorage.getItem("token");
+      const res = await axios.get(`/${batch}/?${searchBy}=${value}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setData(res.data.data[0]);
+      setShowData(true);
+      setDropdownVisible(false);
+    } catch (err) {
+      console.log(err.message);
     }
   };
 
   useEffect(() => {
     verify();
-
-    const cached = localStorage.getItem("allUsersCache");
-    if (cached) {
-      try {
-        const parsed = JSON.parse(cached);
-        setAllUsers(parsed);
-        setUsers(parsed[batch]);
-        setLoading(false);
-      } catch (err) {
-        console.error("Cache parse failed:", err);
-        fetchAllUsers();
-      }
-    } else {
-      fetchAllUsers();
-    }
-  }, []);
-
-  useEffect(() => {
-    if (allUsers[batch]?.length) {
-      setUsers(allUsers[batch]);
-    }
-  }, [batch, allUsers]);
+    fetchUsers();
+  }, [batch, searchBy]);
 
   useEffect(() => {
     if (users.length) {
@@ -135,32 +113,20 @@ const HomePage = () => {
 
   useEffect(() => {
     if (inputValue) {
-      let filteredList =
-        searchBy === "ID"
-          ? ids.filter((id) => id.includes(inputValue))
-          : names.filter((name) =>
-            name.toLowerCase().includes(inputValue.toLowerCase())
-          );
-      setFiltered(filteredList);
-      setDropdownVisible(filteredList.length > 0);
+      let filtered;
+      if (searchBy === "ID")
+        filtered = ids.filter((id) => id.includes(inputValue));
+      else
+        filtered = names.filter((name) =>
+          name.toLowerCase().includes(inputValue.toLowerCase())
+        );
+
+      setFiltered(filtered);
+      setDropdownVisible(filtered.length > 0);
     } else {
       setDropdownVisible(false);
     }
-  }, [inputValue, ids, names, searchBy]);
-
-  const fetchSearchUserData = async (value) => {
-    try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get(`/${batch}/?${searchBy}=${value}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setData(res.data.data[0]);
-      setShowData(true);
-      setDropdownVisible(false);
-    } catch (err) {
-      console.log(err.message);
-    }
-  };
+  }, [inputValue, ids, names]);
 
   const handleSelectValue = (value) => {
     setInputValue(value);
