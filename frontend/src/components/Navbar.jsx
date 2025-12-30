@@ -143,6 +143,16 @@ function Navbar() {
               </li>
             )}
 
+            {adminBro.includes(userData?.email) && (
+              <li
+                className="flex items-center space-x-3 p-3 cursor-pointer hover:bg-gray-700 rounded-lg transition-colors duration-200"
+                onClick={() => handleNavigation("/secret")}
+              >
+                <FaPowerOff className="h-6 w-6 text-blue-400" />
+                <span className="text-sm font-semibold">Secret</span>
+              </li>
+            )}
+
             <li
               className="flex items-center space-x-3 p-3 cursor-pointer hover:bg-red-600 rounded-lg transition-colors duration-200"
               onClick={handleLogout}
