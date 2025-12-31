@@ -78,11 +78,11 @@ const SecretPage = () => {
 
   useEffect(() => {
     if (!userData) return;
-    if (!admins.includes(userData.email)) {
-      toast.error("Why Vro!");
-      navigate("/");
-      return;
-    }
+    // if (!admins.includes(userData.email)) {
+    //   toast.error("Why Vro!");
+    //   navigate("/");
+    //   return;
+    // }
     
     fetchData();
   }, [userData]);
